@@ -74,22 +74,13 @@ loadCrew("sprite", "toolbox-o");
 loadCrew("sprite", "menu-o");
 loadCrew("sprite", "config-o");
 loadCrew("sprite", "sword");
+loadCrew("sprite", "sok");
 
 loadSprite("map", "./test.png");
 loadSprite("mapFg", "./testFg.png");
 loadSpriteAtlas("assets/tileset.png", "assets/tileset.json");
 loadSprite("chunk-24", "assets/chunk-24.png");
 loadSprite("loading", "assets/loading.png")
-
-//-------------
-// handy dandy functions
-//-------------
-function multiplyVec2By(vec, x) {
-    return vec2(
-        vec.x * x,
-        vec.y * x
-    )
-}
 
 //-------------
 // Load all modules
@@ -140,6 +131,8 @@ loadingText.onUpdate(() => {
 console.log("loading..")
 
 loadScripts([
+    // Custom Components & Plugins
+    "modules/custom.js",
     // Map (optimized, chunked)
     "modules/map.js",
     // Objects & UI

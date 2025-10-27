@@ -13,17 +13,6 @@ const player = add([
 ]);
 setCamPos(player.pos);
 
-// the chosen bean's blade. (alan becker reference??)
-const heldItem = add([
-  sprite("sword"),
-  pos(player.pos.add(vec2(50,0))),
-  color(),
-  rotate(0),
-  area(),
-  anchor("center"),
-  layer("ui"),
-])
-
 // that one guy (thatoneguy reference??)
 const glady = add([
   sprite("glady"),
@@ -35,6 +24,17 @@ const glady = add([
   body({ drag: 0.5, maxSpeed: 200 }),
   anchor("center"),
 ]);
+
+// the chosen bean's blade. (alan becker reference??)
+const heldItem = add([
+  sprite("sok"),
+  pos(player.pos.add(vec2(50,0))),
+  color(),
+  rotate(0),
+  area(),
+  anchor("center"),
+  item(0.2),
+])
 
 // the mouse himself (alan becker reference??)
 const cursor = add([

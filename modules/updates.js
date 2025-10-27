@@ -21,7 +21,27 @@ player.onUpdate(() => {
 
 // sword updates (coolness)
 heldItem.onUpdate(() => {
-  heldItem.pos = (player.pos.sub(cursor.pos).x > 0) ? player.pos.add(vec2(-50,0)) : player.pos.add(vec2(50,0));
+  heldItem.pos = player.pos.add(radBtwn(player.pos, cursor.pos).scale(40));
+  heldItem.angle = angleBtwn(player.pos, cursor.pos);
+
+  if (mouseDown && heldItem.time <= 0) {
+    heldItem.time = 0.2;
+    add([
+      pos(player.pos),
+      sprite("sok"),
+      color(),
+      rotate(0),
+      area(),
+      anchor("center"),
+      projectile(400, 3, angleBtwn(player.pos, cursor.pos)),
+      "sokBullet",
+      {
+        update() {
+          this.rotateBy(180 * dt());
+        }
+      }
+    ])
+  }
 })
 
 // glady updates (basic ranger ai)
@@ -59,4 +79,18 @@ menu.onMouseDown(() => { menuToggle = !menuToggle; });
 menu.onUpdate(() => {
   menu.pos = getCamPos().add(center()).sub(vec2(50, 45));
   menu.scale = menuScale ? vec2(1.1, 1.1) : vec2(1, 1);
+})
+
+// Non-specific updates
+
+// Global updates
+onUpdate(() => {})
+
+let mouseDown = false;
+onMousePress(() => {
+  mouseDown = true;
+})
+
+onMouseRelease(() => {
+  mouseDown = false;
 })
