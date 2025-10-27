@@ -1,6 +1,7 @@
 //-------------
 // Objects & UI
 //-------------
+// the chosen bean. (alan becker reference??)
 const player = add([
   sprite("bean"),
   pos(vec2(mapPixelWidth / 2, mapPixelHeight / 2)),
@@ -8,9 +9,34 @@ const player = add([
   rotate(0),
   area(),
   body(),
+  anchor("center"),
 ]);
 setCamPos(player.pos);
 
+// the chosen bean's blade. (alan becker reference??)
+const heldItem = add([
+  sprite("sword"),
+  pos(player.pos.add(vec2(50,0))),
+  color(),
+  rotate(0),
+  area(),
+  anchor("center"),
+  layer("ui"),
+])
+
+// that one guy (thatoneguy reference??)
+const glady = add([
+  sprite("glady"),
+  pos(getCamPos().add(vec2(100, 0))),
+  rotate(0),
+  color(),
+  scale(1),
+  area({ collisionIgnore: ["mapCol"] }),
+  body({ drag: 0.5, maxSpeed: 200 }),
+  anchor("center"),
+]);
+
+// the mouse himself (alan becker reference??)
 const cursor = add([
   sprite("cursor"),
   pos(mousePos()),
@@ -18,6 +44,7 @@ const cursor = add([
   scale(1),
 ]);
 
+// hotbar from terraria (terraria reference??)
 loadSprite("hotbar-slot", "./assets/ui/hotbar-slot.png");
 const hotbarItems = Array.from({ length: 5 }, (_, i) => add([
   sprite("hotbar-slot"),
@@ -29,6 +56,7 @@ const hotbarItems = Array.from({ length: 5 }, (_, i) => add([
   opacity(0.7),
 ]));
 
+// toolbox icon
 const toolbox = add([
   sprite("toolbox-o"),
   pos(getCamPos().sub(center()).add(vec2(50, 45))),
@@ -38,6 +66,7 @@ const toolbox = add([
   anchor("center")
 ]);
 
+// menu icon
 const menu = add([
   sprite("menu-o"),
   pos(getCamPos().add(center()).sub(vec2(50, 45))),

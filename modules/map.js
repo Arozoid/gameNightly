@@ -161,6 +161,7 @@ function createChunkColliders(cx, cy) {
           pos(rectX, rectY),
           area({ shape: new Rect(vec2(0), rectW, rectH) }),
           body({ isStatic: true }),
+          "mapCol",
         ]);
         chunk.bodies.push(bodyEnt);
         x = ex;

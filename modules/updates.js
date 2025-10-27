@@ -19,6 +19,20 @@ player.onUpdate(() => {
   ));
 });
 
+// sword updates (coolness)
+heldItem.onUpdate(() => {
+  heldItem.pos = (player.pos.sub(cursor.pos).x > 0) ? player.pos.add(vec2(-50,0)) : player.pos.add(vec2(50,0));
+})
+
+// glady updates (basic ranger ai)
+glady.onUpdate(() => {
+  if (distance(glady, player) <= height() / 2) {
+    sMoveTowards(glady, player, -150);
+  } else if (distance(glady, player) >= (height() / 2) + 10) {
+    sMoveTowards(glady, player, 200);
+  }
+});
+
 cursor.onUpdate(() => {
   cursor.pos = getCamPos().sub(center()).add(mousePos());
 });
