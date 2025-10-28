@@ -31,7 +31,7 @@ import { kaplay, crew } from "/modules/imports.js";
 //-------------
 
 // cropbot version
-const VERSION = "v0.0.2-hotfix";
+const VERSION = "nightly20251020";
 console.log("Cropbots version:", VERSION);
 
 //-------------
@@ -76,6 +76,7 @@ loadCrew("sprite", "config-o");
 loadCrew("sprite", "sword");
 loadCrew("sprite", "sok");
 loadCrew("sprite", "beenking");
+loadCrew("sprite", "marks_legend");
 
 loadSprite("map", "./test.png");
 loadSprite("mapFg", "./testFg.png");
@@ -134,12 +135,12 @@ console.log("loading..")
 loadScripts([
     // Custom Components & Plugins
     "modules/custom.js",
+    // AI + Pathfinding (tile-based)
+    "modules/ai.js",
     // Map (optimized, chunked)
     "modules/map.js",
     // Objects & UI
     "modules/objects.js",
-    // AI + Pathfinding (tile-based)
-    "modules/ai.js",
     // Inputs & updates
     "modules/updates.js",
     // Draw loop (chunk-aware, only draw visible chunks)

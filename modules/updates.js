@@ -28,31 +28,10 @@ heldItem.onUpdate(() => {
     heldItem.cd = 0.2;
     add([
       pos(player.pos),
-      sprite("sok"),
-      color(),
-      rotate(0),
-      scale(),
-      area(),
-      anchor("center"),
-      projectile(400, 3, angleBtwn(player.pos, cursor.pos)),
-      "sokBullet",
-      {
-        update() {
-          this.rotateBy(180 * dt());
-        }
-      }
+      ...p.sokBullet(angleBtwn(player.pos, cursor.pos)),
     ])
   }
 })
-
-// glady updates (basic ranger ai)
-glady.onUpdate(() => {
-  if (distance(glady, player) <= height() / 2) {
-    sMoveTowards(glady, player, -150);
-  } else if (distance(glady, player) >= (height() / 2) + 10) {
-    sMoveTowards(glady, player, 200);
-  }
-});
 
 cursor.onUpdate(() => {
   cursor.pos = getCamPos().sub(center()).add(mousePos());

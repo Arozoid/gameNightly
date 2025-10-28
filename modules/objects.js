@@ -13,17 +13,35 @@ const player = add([
 ]);
 setCamPos(player.pos);
 
-// that one guy (thatoneguy reference??)
-const glady = add([
-  sprite("glady"),
-  pos(getCamPos().add(vec2(100, 0))),
-  rotate(0),
-  color(),
-  scale(1),
-  area({ collisionIgnore: ["mapCol"] }),
-  body({ drag: 0.5, maxSpeed: 200 }),
-  anchor("center"),
-]);
+// those one guys (thatoneguy reference??)
+for (let i = 0; i < 20; i++) {
+  add([
+    sprite("glady"),
+    pos(getCamPos().add(vec2(((Math.random() * 2) - 1) * 100, ((Math.random() * 2) - 1) * 100))),
+    rotate(0),
+    color(),
+    scale(1),
+    area({ collisionIgnore: ["mapCol"] }),
+    body({ drag: 0.5, maxSpeed: 200 }),
+    anchor("center"),
+    health(5),
+    item(Math.random() * 2),
+    {
+      add() {
+        this.onCollide("playerBullet", (b) => {
+          this.hurt(1);
+          b.lifespan = 0.1;
+        });
+        this.on("death", () => {
+          destroy(this);
+        });
+      },
+      update() {
+        rangerAi(this, player, 2, "bookBullet");
+      },
+    }
+  ]);
+}
 
 // the chosen bean's blade. (alan becker reference??)
 const heldItem = add([

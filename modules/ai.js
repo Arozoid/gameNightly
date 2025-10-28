@@ -20,3 +20,19 @@ function distance(_, obj) {
 		Math.hypot(_.pos.x - obj.pos.x, _.pos.y - obj.pos.y)
 	)
 }
+
+function rangerAi(_, player, prCd, prType) {
+	if (distance(_, player) <= height() / 2) {
+    	sMoveTowards(_, player, -150);
+  	} else if (distance(_, player) >= (height() / 2) + 10) {
+    	sMoveTowards(_, player, 200);
+  	}
+
+  	if (_.cd <= 0) {
+    	_.cd = prCd;
+    	add([
+      		pos(_.pos),
+      		...p[prType](angleBtwn(_.pos, player.pos)),
+    	])
+ 	}
+}

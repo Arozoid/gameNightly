@@ -17,6 +17,61 @@ function radBtwn(vec0, vec1) {
 }
 
 //----------
+// custom types
+//----------
+// projectiles
+
+let p = {
+    // main bullet constructor
+    bullet() {
+        return [
+            "bullet",
+            color(),
+            rotate(0),
+            scale(),
+            area(),
+            anchor("center"),
+            {
+                onExitScreen() {
+                    destroy(this);
+                }
+            }   
+        ]
+    },
+    // sock bullet
+    sokBullet(angle) {
+        return [
+            "sokBullet",
+            "playerBullet",
+            sprite("sok"),
+            ...p.bullet(),
+            projectile(600, 3, angle, false),
+            {
+                update() {
+                    this.rotateBy(180 * dt());
+                }
+            }   
+        ]
+    },
+
+    // mark's legend bullet
+    bookBullet(angle) {
+        return [
+            "bookBullet",
+            "enemyBullet",
+            sprite("marks_legend"),
+            ...p.bullet(),
+      	    projectile(550, 3, angle, false),
+      	    {
+                update() {
+                        this.rotateBy(180 * dt());
+                }
+            }
+        ]
+    }
+};
+
+//----------
 // Custom Components & Plugins
 //----------
 function item(cd) {  
@@ -41,9 +96,11 @@ function projectile(speed, lifespan, direction, col) {
         col: col,
         add() {
             this.use(move(this.dir, this.speed));
-            this.onCollide("mapCol", () => {
-                this.lifespan = 0.1;
-            });
+            if (this.col) {
+                this.onCollide("mapCol", () => {
+                    this.lifespan = 0.1;
+                });
+            }
         },
         update() {
             this.lifespan -= 1 * dt();
