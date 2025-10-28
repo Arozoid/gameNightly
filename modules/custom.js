@@ -33,16 +33,27 @@ function item(time) {
 function projectile(speed, lifespan, direction) {
     return {
         id: "projectile",
+        require: ["area"],
 
         lifespan: lifespan,
         speed: speed,
         dir: direction,
+        add() {
+            this.use(move(this.dir, this.speed));
+            if (!this.scale) {
+                this.use(scale());
+            }
+            this.onCollide("mapCol", () => {
+                this.lifespan = 0.1;
+            })
         update() {
             this.lifespan -= 1 * dt();
-            this.use(move(this.dir, this.speed));
 
             if (this.lifespan <= 0) {
                 destroy(this);
+            } else if (this.lifespan <= 0.1) {
+                this.opacity = this.lifespan * 10;
+                this.scale = vec2(this.lifespan + (0.5 - this.lifespan * 5), this.lifespan + (0.5 - this.lifespan * 5));
             }
         },
     }
