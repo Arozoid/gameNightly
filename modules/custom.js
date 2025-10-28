@@ -46,6 +46,7 @@ function projectile(speed, lifespan, direction) {
             this.onCollide("mapCol", () => {
                 this.lifespan = 0.1;
             })
+        },
         update() {
             this.lifespan -= 1 * dt();
 
