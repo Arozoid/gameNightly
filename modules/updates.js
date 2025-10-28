@@ -19,6 +19,15 @@ player.onUpdate(() => {
   ));
 });
 
+player.onCollide("enemyBullet", () => {
+  player.hurt(1);
+})
+
+player.on("death", () => {
+  destroy(player);
+  destroy(heldItem);
+})
+
 // sword updates (coolness)
 heldItem.onUpdate(() => {
   heldItem.pos = player.pos.add(radBtwn(player.pos, cursor.pos).scale(40));
@@ -50,6 +59,18 @@ hotbarItems.forEach((item, i) => {
   item.onHoverEnd(() => { item.scale = vec2(3.33, 3.33); });
   item.onUpdate(() => {
     item.pos = getCamPos().sub(center()).add(vec2(125 + (i * 75), 50));
+  });
+});
+
+playerHealth.forEach((heart, i) => {
+  heart.onHover(() => { heart.scale = (10 - i > player.hp()) ? vec2(0.9, 0.9) : vec2(1.1, 1.1); });
+  heart.onHoverEnd(() => { heart.scale = (10 - i > player.hp()) ? vec2(0.8, 0.8) : vec2(1, 1); });
+  heart.onUpdate(() => {
+    heart.pos = getCamPos().sub(center()).add(vec2(width()-50-(i * 40), 50));
+    if (10 - i > player.hp()) {
+        heart.color = BLACK;
+        heart.scale = vec2(0.8, 0.8);
+    }
   });
 });
 

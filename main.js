@@ -77,6 +77,7 @@ loadCrew("sprite", "sword");
 loadCrew("sprite", "sok");
 loadCrew("sprite", "beenking");
 loadCrew("sprite", "marks_legend");
+loadCrew("sprite", "heart-o");
 
 loadSprite("map", "./test.png");
 loadSprite("mapFg", "./testFg.png");

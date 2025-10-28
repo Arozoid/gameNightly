@@ -10,6 +10,7 @@ const player = add([
   area(),
   body(),
   anchor("center"),
+  health(10),
 ]);
 setCamPos(player.pos);
 
@@ -17,7 +18,7 @@ setCamPos(player.pos);
 for (let i = 0; i < 20; i++) {
   add([
     sprite("glady"),
-    pos(getCamPos().add(vec2(((Math.random() * 2) - 1) * 100, ((Math.random() * 2) - 1) * 100))),
+    pos(getCamPos().add(vec2(((Math.random() * 2) - 1) * 2000, ((Math.random() * 2) - 1) * 2000))),
     rotate(0),
     color(),
     scale(1),
@@ -72,6 +73,17 @@ const hotbarItems = Array.from({ length: 5 }, (_, i) => add([
   area(),
   anchor("center"),
   opacity(0.7),
+]));
+
+// player health from terraria (terraria reference??)
+const playerHealth = Array.from({ length: 10 }, (_, i) => add([
+  sprite("heart-o"),
+  pos(width() - 50, 50),
+  layer("ui"),
+  scale(),
+  area(),
+  anchor("center"),
+  color(),
 ]));
 
 // toolbox icon
