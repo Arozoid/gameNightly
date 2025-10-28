@@ -24,13 +24,14 @@ heldItem.onUpdate(() => {
   heldItem.pos = player.pos.add(radBtwn(player.pos, cursor.pos).scale(40));
   heldItem.angle = angleBtwn(player.pos, cursor.pos);
 
-  if (mouseDown && heldItem.time <= 0) {
-    heldItem.time = 0.2;
+  if (mouseDown && heldItem.cd <= 0) {
+    heldItem.cd = 0.2;
     add([
       pos(player.pos),
       sprite("sok"),
       color(),
       rotate(0),
+      scale(),
       area(),
       anchor("center"),
       projectile(400, 3, angleBtwn(player.pos, cursor.pos)),

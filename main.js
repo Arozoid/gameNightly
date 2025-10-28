@@ -1,12 +1,6 @@
 // main.js
 // Main javascript workflow for Cropbots (optimized tiling & draw)
 
-//-------------
-// Imports
-//-------------
-import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
-import { crew } from 'https://cdn.skypack.dev/@kaplayjs/crew';
-
 function loadScripts(scripts, callback) {
     let i = 0;
     function next() {
@@ -25,6 +19,12 @@ function loadScripts(scripts, callback) {
     }
     next();
 }
+
+
+//-------------
+// Imports
+//-------------
+import { kaplay, crew } from "/modules/imports.js";
 
 //-------------
 // Constants
@@ -75,6 +75,7 @@ loadCrew("sprite", "menu-o");
 loadCrew("sprite", "config-o");
 loadCrew("sprite", "sword");
 loadCrew("sprite", "sok");
+loadCrew("sprite", "beenking");
 
 loadSprite("map", "./test.png");
 loadSprite("mapFg", "./testFg.png");

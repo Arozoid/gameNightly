@@ -19,30 +19,40 @@ function radBtwn(vec0, vec1) {
 //----------
 // Custom Components & Plugins
 //----------
-function item(time) {  
+function item(cd) {  
     return {
         id: "item",
 
-        time: time,
+        cd: cd,
         update() {
-            this.time -= 1 * dt();
+            this.cd -= 1 * dt();
         },
     };
 }
 
-function projectile(speed, lifespan, direction) {
+function projectile(speed, lifespan, direction, col) {
     return {
         id: "projectile",
+        require: [ "area", "scale" ],
 
         lifespan: lifespan,
         speed: speed,
         dir: direction,
+        col: col,
+        add() {
+            this.use(move(this.dir, this.speed));
+            this.onCollide("mapCol", () => {
+                this.lifespan = 0.1;
+            });
+        },
         update() {
             this.lifespan -= 1 * dt();
-            this.use(move(this.dir, this.speed));
 
             if (this.lifespan <= 0) {
                 destroy(this);
+            } else if (this.lifespan <= 0.1) {
+                this.opacity = this.lifespan * 10;
+                this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
             }
         },
     }
