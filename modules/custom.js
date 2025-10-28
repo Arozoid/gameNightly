@@ -54,7 +54,7 @@ function projectile(speed, lifespan, direction) {
                 destroy(this);
             } else if (this.lifespan <= 0.1) {
                 this.opacity = this.lifespan * 10;
-                this.scale = vec2(this.lifespan + (0.5 - this.lifespan * 5), this.lifespan + (0.5 - this.lifespan * 5));
+                this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
             }
         },
     }
