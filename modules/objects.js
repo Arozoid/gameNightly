@@ -10,14 +10,16 @@ const player = add([
   area(),
   body(),
   anchor("center"),
-  health(10),
+  health(20),
 ]);
 setCamPos(player.pos);
 
-// those one guys (thatoneguy reference??)
-for (let i = 0; i < 20; i++) {
+// those one guys (thatoneguy AND battle cats reference??)
+for (let i = 0; i < 5; i++) {
   add([
-    sprite("glady"),
+    "enemy",
+    "skuller",
+    sprite("skuller"),
     pos(getCamPos().add(vec2(((Math.random() * 2) - 1) * 2000, ((Math.random() * 2) - 1) * 2000))),
     rotate(0),
     color(),
@@ -39,6 +41,37 @@ for (let i = 0; i < 20; i++) {
       },
       update() {
         rangerAi(this, player, 2, "bookBullet");
+      },
+    }
+  ]);
+}
+
+for (let i = 0; i < 2; i++) {
+  add([
+    "enemy",
+    "gigagantrum",
+    sprite("gigagantrum"),
+    pos(getCamPos().add(vec2(((Math.random() * 2) - 1) * 1000, ((Math.random() * 2) - 1) * 1000))),
+    rotate(0),
+    color(),
+    scale(1),
+    area({ collisionIgnore: ["mapCol"] }),
+    body({ drag: 0.5, maxSpeed: 200 }),
+    anchor("center"),
+    health(30),
+    item([3, 2]),
+    {
+      add() {
+        this.onCollide("playerBullet", (b) => {
+          this.hurt(1);
+          b.lifespan = 0.1;
+        });
+        this.on("death", () => {
+          destroy(this);
+        });
+      },
+      update() {
+        gigaAi(this, player, [2, 0.8], ["jamBullet", "fireWaveBullet"]);
       },
     }
   ]);
@@ -76,7 +109,7 @@ const hotbarItems = Array.from({ length: 5 }, (_, i) => add([
 ]));
 
 // player health from terraria (terraria reference??)
-const playerHealth = Array.from({ length: 10 }, (_, i) => add([
+const playerHealth = Array.from({ length: 20 }, (_, i) => add([
   sprite("heart-o"),
   pos(width() - 50, 50),
   layer("ui"),

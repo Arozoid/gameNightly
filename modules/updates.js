@@ -66,8 +66,9 @@ playerHealth.forEach((heart, i) => {
   heart.onHover(() => { heart.scale = (10 - i > player.hp()) ? vec2(0.9, 0.9) : vec2(1.1, 1.1); });
   heart.onHoverEnd(() => { heart.scale = (10 - i > player.hp()) ? vec2(0.8, 0.8) : vec2(1, 1); });
   heart.onUpdate(() => {
-    heart.pos = getCamPos().sub(center()).add(vec2(width()-50-(i * 40), 50));
-    if (10 - i > player.hp()) {
+    heart.pos = getCamPos().sub(center()).add(vec2(width()-50-(i % 10 * 40),50+(Math.floor(i / 10) * 30)));
+    j = (i < 10) ? i + 10 : i - 10;
+    if (20 - j > player.hp()) {
         heart.color = BLACK;
         heart.scale = vec2(0.8, 0.8);
     }

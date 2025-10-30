@@ -72,12 +72,17 @@ loadCrew("sprite", "knock");
 loadCrew("sprite", "glady");
 loadCrew("sprite", "toolbox-o");
 loadCrew("sprite", "menu-o");
-loadCrew("sprite", "config-o");
 loadCrew("sprite", "sword");
 loadCrew("sprite", "sok");
 loadCrew("sprite", "beenking");
 loadCrew("sprite", "marks_legend");
 loadCrew("sprite", "heart-o");
+loadCrew("sprite", "skuller");
+loadCrew("sprite", "gigagantrum");
+loadCrew("sprite", "jam");
+loadCrew("sprite", "config");
+loadCrew("sprite", "lightning");
+loadCrew("sprite", "fire");
 
 loadSprite("map", "./test.png");
 loadSprite("mapFg", "./testFg.png");

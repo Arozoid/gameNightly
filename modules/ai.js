@@ -21,6 +21,30 @@ function distance(_, obj) {
 	)
 }
 
+// shooting bullet
+function shootBullet(_, player, prCd, prType) {
+	if (Array.isArray(_.cd)) {
+		_.cd.forEach((elem, i) => {	
+			if (_.cd[i] <= 0) {
+				_.cd[i] = prCd[i];
+				add([
+					pos(_.pos),
+					...p[prType[i]](angleBtwn(_.pos, player.pos)),
+				])
+			}
+		});
+	} else {
+		if (_.cd <= 0) {
+		_.cd = prCd;
+		add([
+			pos(_.pos),
+			...p[prType](angleBtwn(_.pos, player.pos)),
+		])
+		}
+	}
+}
+
+// ranger ai
 function rangerAi(_, player, prCd, prType) {
 	if (distance(_, player) <= height() / 2) {
     	sMoveTowards(_, player, -150);
@@ -28,11 +52,11 @@ function rangerAi(_, player, prCd, prType) {
     	sMoveTowards(_, player, 200);
   	}
 
-  	if (_.cd <= 0) {
-    	_.cd = prCd;
-    	add([
-      		pos(_.pos),
-      		...p[prType](angleBtwn(_.pos, player.pos)),
-    	])
- 	}
+  	shootBullet(_, player, prCd, prType);
 }
+
+// giga ai
+function gigaAi(_, player, prCd, prType) {
+    sMoveTowards(_, player, 50);
+	shootBullet(_, player, prCd, prType);
+}	
