@@ -17,63 +17,23 @@ setCamPos(player.pos);
 // those one guys (thatoneguy AND battle cats reference??)
 for (let i = 0; i < 5; i++) {
   add([
-    "enemy",
-    "skuller",
-    sprite("skuller"),
-    pos(getCamPos().add(vec2(((Math.random() * 2) - 1) * 2000, ((Math.random() * 2) - 1) * 2000))),
-    rotate(0),
-    color(),
-    scale(1),
-    area({ collisionIgnore: ["mapCol"] }),
-    body({ drag: 0.5, maxSpeed: 200 }),
-    anchor("center"),
-    health(5),
-    item(Math.random() * 2),
+    ...e.skuller(),
     {
       add() {
-        this.onCollide("playerBullet", (b) => {
-          this.hurt(1);
-          b.lifespan = 0.1;
-        });
-        this.on("death", () => {
-          destroy(this);
-        });
+        this.move(vec2((Math.random() * 2500), (Math.random() * 2500)))
       },
-      update() {
-        rangerAi(this, player, 2, "bookBullet");
-      },
-    }
+    },
   ]);
 }
 
 for (let i = 0; i < 2; i++) {
   add([
-    "enemy",
-    "gigagantrum",
-    sprite("gigagantrum"),
-    pos(getCamPos().add(vec2(((Math.random() * 2) - 1) * 1000, ((Math.random() * 2) - 1) * 1000))),
-    rotate(0),
-    color(),
-    scale(1),
-    area({ collisionIgnore: ["mapCol"] }),
-    body({ drag: 0.5, maxSpeed: 200 }),
-    anchor("center"),
-    health(30),
-    item([3, 2]),
+    ...e.gigagantrum(),
     {
       add() {
-        this.onCollide("playerBullet", (b) => {
-          this.hurt(1);
-          b.lifespan = 0.1;
-        });
-        this.on("death", () => {
-          destroy(this);
-        });
+        this.move(vec2((Math.random() * 1000), (Math.random() * 1000)))
       },
-      update() {
-        gigaAi(this, player, [2, 0.8], ["jamBullet", "fireWaveBullet"]);
-      },
-    }
+    },
   ]);
 }
 
@@ -95,6 +55,8 @@ const cursor = add([
   layer("cur"),
   scale(1),
 ]);
+
+cursor.hidden = true;
 
 // hotbar from terraria (terraria reference??)
 loadSprite("hotbar-slot", "./assets/ui/hotbar-slot.png");

@@ -18,6 +18,10 @@ function radBtwn(vec0, vec1) {
     return vec1.sub(vec0).unit();
 }
 
+function dash(vec1) {
+    
+}
+
 //----------
 // custom types
 //----------
@@ -160,9 +164,48 @@ let p = {
     },
 };
 
-// enemies
+// entities
 let e = {
-    
+    enemy() {
+        return [
+            "enemy",
+            scale(),
+            pos(player.pos),
+            area(),
+            rotate(),
+            body({ drag: 0.5, maxSpeed: 200 }),
+            anchor('center'),
+            enemy(),
+        ];
+    },
+    skuller() {
+        return [
+            "skullerEnemy",
+            sprite("skuller"),
+            ...e.enemy(),
+            item(Math.random() * 2),
+            health(5),
+            {
+                update() {
+                    rangerAi(this, player, 2, "bookBullet");
+                }
+            }
+        ];
+    },
+    gigagantrum() {
+        return [
+            "gigagantrumEnemy",
+            sprite("gigagantrum"),
+            ...e.enemy(),
+            item([3, 2]),
+            health(30),
+            {
+                update() {
+                    gigaAi(this, player, [3, 2], ["jamBullet", "fireWaveBullet"]);
+                }
+            }
+        ];
+    },
 }
 
 //----------
@@ -213,6 +256,28 @@ function projectile(speed, lifespan, direction, col) {
                 this.opacity = this.lifespan * 10;
                 this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
             }
+        },
+    }
+}
+
+function enemy() {
+    return {
+        id: "enemy",
+        require: [],
+        
+        xVel: 0,
+        yVel: 0,
+        add() {
+          this.onCollide("playerBullet", (b) => {
+              this.hurt(1);
+              b.lifespan = 0.1;
+          });
+          this.on("death", () => {
+              destroy(this);
+          })
+        },
+        update() {
+            
         },
     }
 }

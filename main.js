@@ -31,7 +31,7 @@ import { kaplay, crew } from "/modules/imports.js";
 //-------------
 
 // cropbot version
-const VERSION = "nightly20251020";
+const VERSION = "nightly20251105";
 console.log("Cropbots version:", VERSION);
 
 //-------------
@@ -59,7 +59,7 @@ kaplay({
 });
 
 setLayers(["bg","obj","fg","ui","load","cur"], "obj");
-setCursor("none");
+//setCursor("none");
 setBackground("1a1a1a");
 
 //-------------
