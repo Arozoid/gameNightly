@@ -24,14 +24,16 @@ function loadScripts(scripts, callback) {
 //-------------
 // Imports
 //-------------
-import { kaplay, crew } from "/modules/imports.js";
+import { kaplay } from "/modules/imports/kaplay.js";
+import { crew } from "/modules/imports/crew.js";
+import { createClient } from "@supabase/supabase-js";
 
 //-------------
 // Constants
 //-------------
 
 // cropbot version
-const VERSION = "nightly20251105";
+const VERSION = "nightly20251110";
 console.log("Cropbots version:", VERSION);
 
 //-------------
