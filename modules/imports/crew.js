@@ -3913,7 +3913,6 @@ var assets = {
   watermelon: watermelonData2,
   zombean: zombeanData2
 };
-export {
-  crew,
-  hw as kaplay
+export { 
+    crew,
 };

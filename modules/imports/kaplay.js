@@ -5262,3 +5262,6 @@ var ic = (t18 = { tagsAsComponents: true }) => {
   return t18.focus !== false && c.canvas.focus(), $e;
 };
 var hw = ic;
+export {
+  hw as kaplay
+};
