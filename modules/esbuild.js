@@ -1,6 +1,5 @@
-import kaplay from 'kaplay'
-import { crew } from '@kaplayjs/crew'
+import { createClient } from '@supabase/supabase-js'
 
-export { kaplay, crew }
+export { createClient }
 
-// npx esbuild --bundle modules/esbuild.js --outfile=modules/imports.js --format=esm
+// npx esbuild --bundle modules/esbuild.js --outfile=modules/imports/supabase.js --format=esm
