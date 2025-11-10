@@ -26,7 +26,7 @@ function loadScripts(scripts, callback) {
 //-------------
 import { kaplay } from "/modules/imports/kaplay.js";
 import { crew } from "/modules/imports/crew.js";
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "/modules/imports/supabase.js";
 
 //-------------
 // Constants
