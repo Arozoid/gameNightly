@@ -40,12 +40,14 @@ console.log("Cropbots version:", VERSION);
 // VM Worker
 //-------------
 const worker = new Worker("workers/vm-worker.js");
+
 worker.onmessage = (e) => {
   const { type, data } = e.data;
   if (type === "log") console.log("Worker log:", ...data);
   else if (type === "result") console.log("Worker result:", data);
   else if (type === "error") console.error("Worker error:", data);
 };
+
 function vm_run(code) {
   worker.postMessage({ code });
 }
@@ -53,11 +55,18 @@ function vm_run(code) {
 //-------------
 // Kaplay init
 //-------------
+// get current URL
+const urlParams = new URLSearchParams(window.location.search);
+
+// get the scale
+const s = (urlParams.get("scale")) ? urlParams.get("scale") : 1;
+console.log("game scale: " + s);
+
 kaplay({
   plugins: [crew],
   font: "happy-o",
   debugKey: "r",
-  scale: 1,
+  scale: s,
 });
 
 setLayers(["bg","obj","fg","ui","load","cur"], "obj");
@@ -78,13 +87,15 @@ loadCrew("sprite", "sword");
 loadCrew("sprite", "sok");
 loadCrew("sprite", "beenking");
 loadCrew("sprite", "marks_legend");
-loadCrew("sprite", "heart-o");
+//loadCrew("sprite", "heart-o");
 loadCrew("sprite", "skuller");
 loadCrew("sprite", "gigagantrum");
 loadCrew("sprite", "jam");
 loadCrew("sprite", "config");
 loadCrew("sprite", "lightning");
 loadCrew("sprite", "fire");
+
+loadSprite("heart-o", "assets/ui/heart.png");
 
 loadSprite("map", "./test.png");
 loadSprite("mapFg", "./testFg.png");

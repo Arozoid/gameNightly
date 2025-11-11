@@ -62,3 +62,63 @@ mapOverlay.onDraw(() => {
     }
   }
 });
+
+// Draw bars
+bars.onDraw(() => {
+  let barsDrawn = [];
+  const dPct = Math.max(player.dashCd / player.dashMCd, 0);
+  const iPct = Math.max(heldItem.cd / heldItem.mCd, 0);
+
+  if (dPct > 0) barsDrawn.push("dash");
+  if (iPct > 0) barsDrawn.push("cd");
+
+  if (dPct > 0)
+  drawBar({
+        width: 100,
+        height: 20,
+        x: center().x - 50,
+        y: height() - 50,
+        outline: 7.5,
+        bgColor: rgb(22, 22, 22),
+        fgColor: rgba(227, 254, 255, 1),
+        pct: dPct,
+  })
+
+  if (iPct > 0)
+  drawBar({
+        width: 100,
+        height: 20,
+        x: center().x - 50,
+        y: height() - 50 - (35 * barsDrawn.indexOf("cd")),
+        outline: 7.5,
+        bgColor: rgb(22, 22, 22),
+        fgColor: rgba(98, 255, 83, 1),
+        pct: iPct,
+  })
+});
+
+// Draw hearts
+onDraw(() => {
+  for (let i = pHp - 1; i >= 0; i--) {
+      const flippedIndex = pHp - 1 - i;
+      let s = vec2(1, 1)
+      let c = WHITE;
+      if (flippedIndex >= player.hp()) {
+        s = vec2(0.8, 0.8);
+        c = BLACK;
+      }
+
+      drawSprite({
+          sprite: `heart-o`,
+          pos: getCamPos()
+            .sub(center())
+            .add(vec2(
+              offsetX - (i % heartsPerRow) * heartSpacingX,
+              offsetY + (totalRows - 1 - (Math.floor(i / heartsPerRow))) * heartSpacingY
+            )),
+          scale: s,
+          color: c,
+          anchor: "center",
+      });
+  }
+})

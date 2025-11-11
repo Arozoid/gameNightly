@@ -2,6 +2,8 @@
 // Objects & UI
 //-------------
 // the chosen bean. (alan becker reference??)
+pHp = 20;
+
 const player = add([
   sprite("bean"),
   pos(vec2(mapPixelWidth / 2, mapPixelHeight / 2)),
@@ -10,8 +12,11 @@ const player = add([
   area(),
   body(),
   anchor("center"),
-  health(20),
+  health(pHp),
+  dash(true, 1200, 0, 1, 0.2),
+  lifespan(-1, true),
 ]);
+
 setCamPos(player.pos);
 
 // those one guys (thatoneguy AND battle cats reference??)
@@ -45,7 +50,7 @@ const heldItem = add([
   rotate(0),
   area(),
   anchor("center"),
-  item(0.2),
+  item(0.2, 0.2),
 ])
 
 // the mouse himself (alan becker reference??)
@@ -71,7 +76,7 @@ const hotbarItems = Array.from({ length: 5 }, (_, i) => add([
 ]));
 
 // player health from terraria (terraria reference??)
-const playerHealth = Array.from({ length: 20 }, (_, i) => add([
+const playerHealth = Array.from({ length: player.hp() }, (_, i) => add([
   sprite("heart-o"),
   pos(width() - 50, 50),
   layer("ui"),
@@ -115,3 +120,13 @@ let toolboxScale = false;
 // menu
 let menuToggle = false;
 let menuScale = false;
+
+// other stuff
+const bars = add([
+  sprite("bean"),
+  opacity(0),
+  layer("cur"),
+  color(YELLOW),
+  scale(1),
+  pos(getCamPos().sub(center())),
+])

@@ -18,8 +18,59 @@ function radBtwn(vec0, vec1) {
     return vec1.sub(vec0).unit();
 }
 
-function dash(vec1) {
-    
+function vecLen(vec) {
+    return Math.sqrt(vec.x*vec.x + vec.y*vec.y);
+}
+
+function vecNormal(vec) {
+    const len = vecLen(vec);
+
+    if (len > 0) {
+        return vec2(vec.x / len, vec.y / len);
+    } else {
+        return vec2(1,0); // default right if no input
+    }
+}
+
+function rgba(r, g, b, a) {
+    return rgb(r, g, b);
+}
+
+function drawBar(_ = {
+        width: 100,
+        height: 20,
+        x: center().x - _.w,
+        y: height() - 50,
+        outline: 7.5,
+        bgColor: rgb(22, 22, 22),
+        fgColor: rgb(244, 244, 255),
+        pct: 0,
+    }) {
+
+    const w = _.width;
+    const h = _.height;
+    const x = _.x;
+    const y = _.y;
+    const o = _.outline;
+    const c = _.bgColor;
+    const fC = _.fgColor;
+    const pct = _.pct;
+
+    // background
+    drawRect({
+      pos: vec2(x, y),
+      width: w,
+      height: h,
+      color: c,
+    });
+
+    // fill
+    drawRect({
+      pos: vec2(x + o/2, y + o/2),
+      width: (w - o) * pct,
+      height: (h - o),
+      color: fC,
+    });
 }
 
 //----------
@@ -166,25 +217,26 @@ let p = {
 
 // entities
 let e = {
-    enemy() {
+    enemy(col = []) {
         return [
             "enemy",
             scale(),
             pos(player.pos),
-            area(),
+            area({ collisionIgnore: col }),
             rotate(),
             body({ drag: 0.5, maxSpeed: 200 }),
             anchor('center'),
             enemy(),
+            lifespan(-1, true),
         ];
     },
     skuller() {
         return [
             "skullerEnemy",
             sprite("skuller"),
-            ...e.enemy(),
-            item(Math.random() * 2),
             health(5),
+            ...e.enemy(["mapCol"]),
+            item(Math.random() * 2),
             {
                 update() {
                     rangerAi(this, player, 2, "bookBullet");
@@ -196,9 +248,9 @@ let e = {
         return [
             "gigagantrumEnemy",
             sprite("gigagantrum"),
-            ...e.enemy(),
-            item([3, 2]),
             health(30),
+            ...e.enemy(["mapCol"]),
+            item([3, 2]),
             {
                 update() {
                     gigaAi(this, player, [3, 2], ["jamBullet", "fireWaveBullet"]);
@@ -211,11 +263,12 @@ let e = {
 //----------
 // Custom Components & Plugins
 //----------
-function item(cd) {  
+function item(cd, mCd = []) {  
     return {
         id: "item",
 
         cd: cd,
+        mCd: mCd,
         update() {
             if (this.cd[1]) {
                 this.cd = this.cd.map(n => n - (1 * dt()));
@@ -228,6 +281,27 @@ function item(cd) {
             return `item: ${this.cd}`;
         }
     };
+}
+
+function lifespan(lifespan, s = false) {
+    return {
+        id: "lifespan",
+        require: [],
+
+        lifespan: lifespan,
+        update() {
+            if (this.lifespan === -1) return;
+
+            this.lifespan -= dt();
+
+            if (this.lifespan <= 0) destroy(this);
+
+            if (this.lifespan <= 0.1 && s) {
+                this.opacity = this.lifespan * 10;
+                this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
+            }
+        }
+    }
 }
 
 function projectile(speed, lifespan, direction, col) {
@@ -248,11 +322,11 @@ function projectile(speed, lifespan, direction, col) {
         },
         update() {
             this.use(move(this.dir, this.speed));
-            this.lifespan -= 1 * dt();
+            this.lifespan -= dt();
 
-            if (this.lifespan <= 0) {
-                destroy(this);
-            } else if (this.lifespan <= 0.1) {
+            if (this.lifespan <= 0) destroy(this);
+            
+            if (this.lifespan <= 0.1) {
                 this.opacity = this.lifespan * 10;
                 this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
             }
@@ -263,7 +337,7 @@ function projectile(speed, lifespan, direction, col) {
 function enemy() {
     return {
         id: "enemy",
-        require: [],
+        require: [ "health", "lifespan" ],
         
         xVel: 0,
         yVel: 0,
@@ -273,11 +347,62 @@ function enemy() {
               b.lifespan = 0.1;
           });
           this.on("death", () => {
-              destroy(this);
+              this.lifespan = 0.1;
           })
         },
         update() {
             
+        },
+    }
+}
+
+function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2) {
+    return {
+        id: "dash",
+        require: [ "pos" ],
+
+        isDashing: false,
+        dashSpeed: dSpd,
+        dashCd: dCd,
+        dashMCd: dMCd,
+        dashDuration: dDur,
+        dashDurRmn: 0,
+        dashDir: vec2(0,0),
+        col: col,
+        dash(x, y) {
+            if (this.dashCd > 0 || this.isDashing) return;
+
+            if (this.col) this.use(area({collisionIgnore: ["mapCol"]}));
+            this.isDashing = true;
+            this.dashCd = this.dashMCd;
+            this.dashDurRmn = this.dashDuration;
+
+            // store dash direction
+            this.dashDir = vec2(x, y);
+            
+            this.dashDir = vecNormal(this.dashDir);
+        },
+        update() {
+            if (this.dashCd > 0) this.dashCd -= dt();
+
+            if (this.isDashing) {
+                this.dashDurRmn -= dt();
+                this.pos = this.pos.add(this.dashDir.scale(this.dashSpeed * dt()));
+
+                // create trail
+                add([
+                    pos(this.pos),
+                    anchor("center"),
+                    sprite(this.sprite),
+                    opacity(0.3),
+                    lifespan(0.1) // fades quickly
+                ]);
+
+                if (this.dashDurRmn <= 0) {
+                    this.isDashing = false;
+                    if (this.col) this.use(area());
+                }
+            }
         },
     }
 }

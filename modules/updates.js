@@ -1,30 +1,47 @@
 //-------------
 // Input & updates
 //-------------
-player.onUpdate(() => {
-  const inputX = (isKeyDown("d") ? 1 : 0) - (isKeyDown("a") ? 1 : 0);
-  const inputY = (isKeyDown("s") ? 1 : 0) - (isKeyDown("w") ? 1 : 0);
-  xVel += inputX * player_speed;
-  yVel += inputY * player_speed;
-  const targetVel = vec2(xVel, yVel);
-  xVel *= friction;
-  yVel *= friction;
-  player.vel = targetVel;
-  setCamPos(getCamPos().lerp(player.pos, 0.12));
 
-  const cam = getCamPos();
-  setCamPos(vec2(
-    Math.floor(cam.x),
-    Math.floor(cam.y)
-  ));
+player.onUpdate(() => {
+    const inputDir = vec2(
+        (isKeyDown("d") ? 1 : 0) - (isKeyDown("a") ? 1 : 0),
+        (isKeyDown("s") ? 1 : 0) - (isKeyDown("w") ? 1 : 0)
+    );
+
+    // dash
+    if (isKeyDown("space")) {
+        player.dash(inputDir.x, inputDir.y);
+    }
+
+    // only apply normal input velocity if NOT dashing
+    if (!player.isDashing) {
+        xVel += inputDir.x * player_speed;
+        yVel += inputDir.y * player_speed;
+
+        const targetVel = vec2(xVel, yVel);
+        xVel *= friction;
+        yVel *= friction;
+        player.vel = targetVel;
+    } else {
+        // zero out normal vel to avoid conflict
+        player.vel = vec2(0,0);
+    }
+
+    setCamPos(getCamPos().lerp(player.pos, 0.12));
+
+    const cam = getCamPos();
+    setCamPos(vec2(
+        Math.floor(cam.x),
+        Math.floor(cam.y)
+    ));
 });
 
 player.onCollide("enemyBullet", () => {
-  player.hurt(1);
+  if (!player.isDashing) player.hurt(1);
 })
 
 player.on("death", () => {
-  destroy(player);
+  player.lifespan = 0.1;
   destroy(heldItem);
 })
 
@@ -62,18 +79,47 @@ hotbarItems.forEach((item, i) => {
   });
 });
 
-playerHealth.forEach((heart, i) => {
-  heart.onHover(() => { heart.scale = (10 - i > player.hp()) ? vec2(0.9, 0.9) : vec2(1.1, 1.1); });
-  heart.onHoverEnd(() => { heart.scale = (10 - i > player.hp()) ? vec2(0.8, 0.8) : vec2(1, 1); });
-  heart.onUpdate(() => {
-    heart.pos = getCamPos().sub(center()).add(vec2(width()-50-(i % 10 * 40),50+(Math.floor(i / 10) * 30)));
-    j = (i < 10) ? i + 10 : i - 10;
-    if (20 - j > player.hp()) {
-        heart.color = BLACK;
-        heart.scale = vec2(0.8, 0.8);
-    }
-  });
-});
+const heartsPerRow = 10;
+const heartSpacingX = 40;
+const heartSpacingY = 30;
+const offsetX = width() - 50;
+const offsetY = 50; // bottom of first row
+
+const totalRows = Math.ceil(playerHealth.length / heartsPerRow);
+
+/*
+for (let i = playerHealth.length - 1; i >= 0; i--) { // reverse!
+    const heart = playerHealth[i];
+    const flippedIndex = playerHealth.length - 1 - i; // for hp logic
+
+    heart.onHover(() => {
+        heart.scale = (flippedIndex >= player.hp()) ? vec2(0.9, 0.9) : vec2(1.1, 1.1);
+    });
+
+    heart.onHoverEnd(() => {
+        heart.scale = (flippedIndex >= player.hp()) ? vec2(0.8, 0.8) : vec2(1, 1);
+    });
+
+    heart.onUpdate(() => {
+        const row = Math.floor(i / heartsPerRow);
+        const col = i % heartsPerRow;
+
+        const posY = offsetY + (totalRows - 1 - row) * heartSpacingY;
+
+        heart.pos = getCamPos()
+            .sub(center())
+            .add(vec2(
+                offsetX - col * heartSpacingX,
+                posY
+            ));
+
+        if (flippedIndex >= player.hp()) {
+            heart.color = BLACK;
+            heart.scale = vec2(0.8, 0.8);
+        }
+    });
+}
+*/
 
 menu.onHover(() => { menuScale = true; });
 menu.onHoverEnd(() => { menuScale = false; });
@@ -83,7 +129,8 @@ menu.onUpdate(() => {
   menu.scale = menuScale ? vec2(1.1, 1.1) : vec2(1, 1);
 })
 
-// Non-specific updates
+// Bars (item cooldown, dash, etc.)
+bars.onUpdate(() => { bars.pos = getCamPos().sub(center()); });
 
 // Global updates
 onUpdate(() => {})
