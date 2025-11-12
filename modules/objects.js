@@ -5,11 +5,14 @@
 pHp = 20;
 
 const player = add([
-  sprite("bean"),
+  sprite("player02"),
   pos(vec2(mapPixelWidth / 2, mapPixelHeight / 2)),
   color(),
   rotate(0),
-  area(),
+  area({
+    shape: new Rect(vec2(0), 20, 20),
+    collisionIgnore: ["mapCol"],
+  }),
   body(),
   anchor("center"),
   health(pHp),
@@ -76,15 +79,12 @@ const hotbarItems = Array.from({ length: 5 }, (_, i) => add([
 ]));
 
 // player health from terraria (terraria reference??)
-const playerHealth = Array.from({ length: player.hp() }, (_, i) => add([
-  sprite("heart-o"),
-  pos(width() - 50, 50),
+const playerHealth = add([
+  pos(0,0),
+  sprite("bean"),
+  opacity(0),
   layer("ui"),
-  scale(),
-  area(),
-  anchor("center"),
-  color(),
-]));
+])
 
 // toolbox icon
 const toolbox = add([

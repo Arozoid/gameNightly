@@ -46,9 +46,9 @@ function shootBullet(_, player, prCd, prType) {
 
 // ranger ai
 function rangerAi(_, player, prCd, prType) {
-	if (distance(_, player) <= height() / 2) {
+	if (distance(_, player) <= 625) {
     	sMoveTowards(_, player, -150);
-  	} else if (distance(_, player) >= (height() / 2) + 10) {
+  	} else if (distance(_, player) >= 635) {
     	sMoveTowards(_, player, 200);
   	}
 

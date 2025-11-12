@@ -3,6 +3,7 @@
     "@kaplayjs/crew": "^2.0.1",
     "@supabase/supabase-js": "^2.80.0",
     "httpserver": "^0.3.0",
-    "kaplay": "^3001.0.19"
+    "kaplay": "^3001.0.19",
+    "passwordless": "^1.1.3"
   }
 }

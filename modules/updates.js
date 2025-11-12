@@ -37,7 +37,10 @@ player.onUpdate(() => {
 });
 
 player.onCollide("enemyBullet", () => {
-  if (!player.isDashing) player.hurt(1);
+  if (!player.isDashing) { 
+    if (gameShake) shake(3);
+    player.hurt(1); 
+  }
 })
 
 player.on("death", () => {
@@ -79,47 +82,9 @@ hotbarItems.forEach((item, i) => {
   });
 });
 
-const heartsPerRow = 10;
-const heartSpacingX = 40;
-const heartSpacingY = 30;
-const offsetX = width() - 50;
-const offsetY = 50; // bottom of first row
-
-const totalRows = Math.ceil(playerHealth.length / heartsPerRow);
-
-/*
-for (let i = playerHealth.length - 1; i >= 0; i--) { // reverse!
-    const heart = playerHealth[i];
-    const flippedIndex = playerHealth.length - 1 - i; // for hp logic
-
-    heart.onHover(() => {
-        heart.scale = (flippedIndex >= player.hp()) ? vec2(0.9, 0.9) : vec2(1.1, 1.1);
-    });
-
-    heart.onHoverEnd(() => {
-        heart.scale = (flippedIndex >= player.hp()) ? vec2(0.8, 0.8) : vec2(1, 1);
-    });
-
-    heart.onUpdate(() => {
-        const row = Math.floor(i / heartsPerRow);
-        const col = i % heartsPerRow;
-
-        const posY = offsetY + (totalRows - 1 - row) * heartSpacingY;
-
-        heart.pos = getCamPos()
-            .sub(center())
-            .add(vec2(
-                offsetX - col * heartSpacingX,
-                posY
-            ));
-
-        if (flippedIndex >= player.hp()) {
-            heart.color = BLACK;
-            heart.scale = vec2(0.8, 0.8);
-        }
-    });
-}
-*/
+playerHealth.onUpdate(() => {
+  playerHealth.pos = getCamPos().sub(center());
+})
 
 menu.onHover(() => { menuScale = true; });
 menu.onHoverEnd(() => { menuScale = false; });

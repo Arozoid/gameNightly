@@ -348,6 +348,7 @@ function enemy() {
           });
           this.on("death", () => {
               this.lifespan = 0.1;
+              if (gameShake) shake(3);
           })
         },
         update() {
@@ -372,7 +373,7 @@ function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2) {
         dash(x, y) {
             if (this.dashCd > 0 || this.isDashing) return;
 
-            if (this.col) this.use(area({collisionIgnore: ["mapCol"]}));
+            if (this.col) this.collisionIgnore = ["mapCol","enemy","player"];
             this.isDashing = true;
             this.dashCd = this.dashMCd;
             this.dashDurRmn = this.dashDuration;
@@ -400,7 +401,7 @@ function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2) {
 
                 if (this.dashDurRmn <= 0) {
                     this.isDashing = false;
-                    if (this.col) this.use(area());
+                    if (this.col) this.collisionIgnore = [];
                 }
             }
         },

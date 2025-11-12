@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js'
+var passwordless = require('passwordless');
 
-export { createClient }
-
-// npx esbuild --bundle modules/esbuild.js --outfile=modules/imports/supabase.js --format=esm
+// npx esbuild --bundle modules/esbuild.js --outfile=modules/imports/passwordless.js --format=esm

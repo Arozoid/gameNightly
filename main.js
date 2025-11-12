@@ -63,6 +63,7 @@ const s = (urlParams.get("scale")) ? urlParams.get("scale") : 1;
 console.log("game scale: " + s);
 
 kaplay({
+  loadingScreen: false,
   plugins: [crew],
   font: "happy-o",
   debugKey: "r",
@@ -96,6 +97,9 @@ loadCrew("sprite", "lightning");
 loadCrew("sprite", "fire");
 
 loadSprite("heart-o", "assets/ui/heart.png");
+loadSprite("heart-empty-o", "assets/ui/heart-empty.png");
+loadSprite("player01", "assets/objects/player01.png");
+loadSprite("player02", "assets/objects/player02.png");
 
 loadSprite("map", "./test.png");
 loadSprite("mapFg", "./testFg.png");
@@ -149,9 +153,20 @@ loadingText.onUpdate(() => {
     loadingText.pos = getCamPos().add(vec2(-3.75*30, 50));
 })
 
+onLoading((pct) => {
+    loadingBean.rotateBy(45 * dt());
+    loadingBean.pos = getCamPos();
+
+    loadingRect.pos = getCamPos().sub(center());
+
+    loadingText.pos = getCamPos().add(vec2(-3.75*30, 50));
+})
+
 console.log("loading..")
 
 loadScripts([
+    // Settings initialization
+    "modules/load.js",
     // Custom Components & Plugins
     "modules/custom.js",
     // AI + Pathfinding (tile-based)
@@ -163,7 +178,7 @@ loadScripts([
     // Inputs & updates
     "modules/updates.js",
     // Draw loop (chunk-aware, only draw visible chunks)
-    "modules/draw.js"
+    "modules/draw.js",
 ], 
 
 () => {

@@ -98,26 +98,31 @@ bars.onDraw(() => {
 });
 
 // Draw hearts
-onDraw(() => {
+const heartsPerRow = 10;
+const heartSpacingX = 40;
+const heartSpacingY = 30;
+const offsetX = width() - 50;
+const offsetY = 50; // bottom of first row
+
+const totalRows = Math.ceil(pHp / heartsPerRow);
+
+playerHealth.onDraw(() => {
   for (let i = pHp - 1; i >= 0; i--) {
       const flippedIndex = pHp - 1 - i;
-      let s = vec2(1, 1)
-      let c = WHITE;
+      let s = vec2(1, 1);
+      let c = 'heart-o';
       if (flippedIndex >= player.hp()) {
-        s = vec2(0.8, 0.8);
-        c = BLACK;
+        s = vec2(0.9, 0.9);
+        c = 'heart-empty-o';
       }
 
       drawSprite({
-          sprite: `heart-o`,
-          pos: getCamPos()
-            .sub(center())
-            .add(vec2(
+          sprite: c,
+          pos: vec2(
               offsetX - (i % heartsPerRow) * heartSpacingX,
               offsetY + (totalRows - 1 - (Math.floor(i / heartsPerRow))) * heartSpacingY
-            )),
+              ),
           scale: s,
-          color: c,
           anchor: "center",
       });
   }
