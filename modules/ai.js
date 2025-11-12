@@ -60,3 +60,10 @@ function gigaAi(_, player, prCd, prType) {
     sMoveTowards(_, player, 50);
 	shootBullet(_, player, prCd, prType);
 }	
+
+// virat ai
+function viratAi(_, player, prCd, prType) {
+	sMoveTowards(_, player, 200);
+	const inputDir = radBtwn(_.pos, player.pos);
+    _.dash(inputDir.x, inputDir.y);
+}

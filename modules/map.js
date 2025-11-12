@@ -46,39 +46,73 @@ function clamp(v, a, b) {
   return Math.max(a, Math.min(b, v));
 }
 
-// Add these helper functions before createTiles()
-function canPlaceBush(x, y) {
-  if (x < 0 || x >= cols || y < 0 || y >= rows) return false;
-  // Check surrounding 8 tiles for other bushes
-  for (let dy = -1; dy <= 1; dy++) {
-    for (let dx = -1; dx <= 1; dx++) {
-      if (dx === 0 && dy === 0) continue;
-      const nx = x + dx;
-      const ny = y + dy;
-      if (nx >= 0 && nx < cols && ny >= 0 && ny < rows) {
-        const idx = tileIndexAt(nx, ny);
-        if (mapFgIdx[idx] === 56 || mapFgIdx[idx] === 57) return false;
-      }
+//------------------
+// structure framework
+//------------------
+function canPlaceStructure(x, y, width, height) {
+  // prevent placement outside map bounds
+  if (x < 0 || y < 0 || x + width > cols || y + height > rows) return false;
+
+  for (let dy = 0; dy < height; dy++) {
+    for (let dx = 0; dx < width; dx++) {
+      const idx = tileIndexAt(x + dx, y + dy);
+      if (mapFgIdx[idx] !== 0 || mapOverlayIdx[idx] !== 0) return false;
     }
   }
   return true;
 }
 
-function canPlaceTree(x, y) {
-  // Check a 4x5 area (2 tiles padding around tree) for other trees
-  for (let dy = -1; dy < 4; dy++) {
-    for (let dx = -1; dx < 3; dx++) {
-      const nx = x + dx;
-      const ny = y + dy;
-      if (nx >= 0 && nx < cols && ny >= 0 && ny < rows) {
-        const idx = tileIndexAt(nx, ny);
-        if (mapFgIdx[idx] !== 0 || mapOverlayIdx[idx] !== 0) {
-          return false;
-        }
+/**
+ * pattern: 2D array of { id, layer: 'fg'|'overlay', collider:boolean } 
+ */
+function placeStructure(x, y, pattern) {
+  for (let dy = 0; dy < pattern.length; dy++) {
+    for (let dx = 0; dx < pattern[0].length; dx++) {
+      const tile = pattern[dy][dx];
+      if (!tile) continue;
+
+      const idx = tileIndexAt(x + dx, y + dy);
+
+      if (tile.layer === 'fg') {
+        mapFgIdx[idx] = tile.id;
+        if (tile.collider) colliderMask[idx] = 1;
+      } else if (tile.layer === 'overlay') {
+        mapOverlayIdx[idx] = tile.id;
       }
     }
   }
-  return true;
+}
+
+//------------------
+// tree & bush patterns
+//------------------
+const treePattern = [
+  [ {id:157, layer:'overlay'}, {id:158, layer:'overlay'} ],
+  [ {id:174, layer:'overlay'}, {id:175, layer:'overlay'} ],
+  [ {id:191, layer:'fg', collider:true}, {id:192, layer:'fg', collider:true} ]
+];
+
+const bushPattern = [
+  [ {id:56, layer:'fg', collider:true} ]
+];
+
+//------------------
+// helpers for random placement
+//------------------
+function tryPlaceTree(x, y, rng=Math.random) {
+  if (rng() < 0.015 && canPlaceStructure(x, y, 2, 3)) {
+    placeStructure(x, y, treePattern);
+    return true;
+  }
+  return false;
+}
+
+function tryPlaceBush(x, y, rng=Math.random) {
+  if (rng() < 0.07 && canPlaceStructure(x, y, 1, 1)) {
+    placeStructure(x, y, bushPattern);
+    return true;
+  }
+  return false;
 }
 
 // Optimized createTiles function
@@ -87,31 +121,13 @@ function createTiles() {
   mapBgIdx.fill(24); // base tile
 
   // Place vegetation with spacing rules
-  const randomValues = Array.from({ length: cols * rows }, () => Math.random());
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       const idx = tileIndexAt(x, y);
-      const r = randomValues[idx]; // Use pre-generated random value
 
-      if (r < 0.015 && canPlaceTree(x, y)) {
-        // Place 2x3 tree structure
-        const treeSprites = [157, 158, 174, 175, 191, 192];
-        for (let ty = 0; ty < 3; ty++) {
-          for (let tx = 0; tx < 2; tx++) {
-            const treeIdx = tileIndexAt(x + tx, y + ty);
-            const spriteIdx = treeSprites[ty * 2 + tx];
-            if (ty < 2) {
-              mapOverlayIdx[treeIdx] = spriteIdx; // Canopy in overlay
-            } else {
-              mapFgIdx[treeIdx] = spriteIdx; // Trunk in foreground
-              colliderMask[treeIdx] = 1;
-            }
-          }
-        }
-      } else if (r < 0.07 && canPlaceBush(x, y) && mapFgIdx[idx] === 0 && mapOverlayIdx[idx] === 0) {
-        mapFgIdx[idx] = 56 + Math.round(Math.random());
-        colliderMask[idx] = 1;
-      }
+      // structures
+      tryPlaceTree(x, y);
+      tryPlaceBush(x, y);
     }
   }
 

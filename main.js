@@ -88,7 +88,6 @@ loadCrew("sprite", "sword");
 loadCrew("sprite", "sok");
 loadCrew("sprite", "beenking");
 loadCrew("sprite", "marks_legend");
-//loadCrew("sprite", "heart-o");
 loadCrew("sprite", "skuller");
 loadCrew("sprite", "gigagantrum");
 loadCrew("sprite", "jam");
@@ -98,11 +97,11 @@ loadCrew("sprite", "fire");
 
 loadSprite("heart-o", "assets/ui/heart.png");
 loadSprite("heart-empty-o", "assets/ui/heart-empty.png");
+
 loadSprite("player01", "assets/objects/player01.png");
 loadSprite("player02", "assets/objects/player02.png");
+loadSprite("virat", "assets/objects/virat.png");
 
-loadSprite("map", "./test.png");
-loadSprite("mapFg", "./testFg.png");
 loadSpriteAtlas("assets/tileset.png", "assets/tileset.json");
 loadSprite("chunk-24", "assets/chunk-24.png");
 loadSprite("loading", "assets/loading.png")

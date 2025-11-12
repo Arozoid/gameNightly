@@ -5,13 +5,13 @@
 pHp = 20;
 
 const player = add([
+  "player",
   sprite("player02"),
   pos(vec2(mapPixelWidth / 2, mapPixelHeight / 2)),
   color(),
   rotate(0),
   area({
     shape: new Rect(vec2(0), 20, 20),
-    collisionIgnore: ["mapCol"],
   }),
   body(),
   anchor("center"),
@@ -25,7 +25,7 @@ setCamPos(player.pos);
 // those one guys (thatoneguy AND battle cats reference??)
 for (let i = 0; i < 5; i++) {
   add([
-    ...e.skuller(),
+    ...e.virat(),
     {
       add() {
         this.move(vec2((Math.random() * 2500), (Math.random() * 2500)))
@@ -34,7 +34,7 @@ for (let i = 0; i < 5; i++) {
   ]);
 }
 
-for (let i = 0; i < 2; i++) {
+/*for (let i = 0; i < 2; i++) {
   add([
     ...e.gigagantrum(),
     {
@@ -43,7 +43,7 @@ for (let i = 0; i < 2; i++) {
       },
     },
   ]);
-}
+}*/
 
 // the chosen bean's blade. (alan becker reference??)
 const heldItem = add([

@@ -73,6 +73,39 @@ function drawBar(_ = {
     });
 }
 
+// simple rectangle-based collision for dash phase-through
+function rectOverlap(a, b) {
+    const aw = a.width || 32;
+    const ah = a.height || 32;
+    const bw = b.width || 32;
+    const bh = b.height || 32;
+
+    return (
+        a.pos.x < b.pos.x + bw &&
+        a.pos.x + aw > b.pos.x &&
+        a.pos.y < b.pos.y + bh &&
+        a.pos.y + ah > b.pos.y
+    );
+}
+
+// collideOnce version for phase-through
+function collideOnceWith(obj, targets, callback) {
+    obj._currentCollisions = obj._currentCollisions || new Set();
+
+    get(targets).forEach(t => {
+        if (t === obj) return;
+
+        if (rectOverlap(obj, t)) {
+            if (!obj._currentCollisions.has(t)) {
+                obj._currentCollisions.add(t);
+                callback(t);
+            }
+        } else {
+            obj._currentCollisions.delete(t);
+        }
+    });
+}
+
 //----------
 // custom types
 //----------
@@ -258,6 +291,28 @@ let e = {
             }
         ];
     },
+    virat() {
+        return [
+            "viratEnemy",
+            sprite("virat"),
+            health(5),
+            ...e.enemy(["mapCol"]),
+            item(Math.random() * 2),
+            dash(["mapCol"], 1200, Math.random() * 2, 2, 0.3, ["mapCol", "enemy", "player"]),
+            scale(1.5),
+            {
+                add() {
+                },
+                update() {
+                    collideOnceWith(this, "player", (p) => {
+                        p.hurt(1);
+                    })
+
+                    viratAi(this, player, null, null)
+                }
+            }
+        ]
+    },
 }
 
 //----------
@@ -357,7 +412,7 @@ function enemy() {
     }
 }
 
-function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2) {
+function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2, dCol = ["mapCol", "enemy", "player"]) {
     return {
         id: "dash",
         require: [ "pos" ],
@@ -373,7 +428,7 @@ function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2) {
         dash(x, y) {
             if (this.dashCd > 0 || this.isDashing) return;
 
-            if (this.col) this.collisionIgnore = ["mapCol","enemy","player"];
+            if (this.col) this.collisionIgnore = dCol;
             this.isDashing = true;
             this.dashCd = this.dashMCd;
             this.dashDurRmn = this.dashDuration;
@@ -395,13 +450,14 @@ function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2) {
                     pos(this.pos),
                     anchor("center"),
                     sprite(this.sprite),
+                    scale(this.scale),
                     opacity(0.3),
                     lifespan(0.1) // fades quickly
                 ]);
 
                 if (this.dashDurRmn <= 0) {
                     this.isDashing = false;
-                    if (this.col) this.collisionIgnore = [];
+                    if (this.col) this.collisionIgnore = (Array.isArray(this.col)) ? this.col : [];
                 }
             }
         },
