@@ -298,14 +298,14 @@ let e = {
             health(5),
             ...e.enemy(["mapCol"]),
             item(Math.random() * 2),
-            dash(["mapCol"], 1200, Math.random() * 2, 2, 0.3, ["mapCol", "enemy", "player"]),
+            dash(["mapCol"], 1200, Math.random() * 5, 2, 0.3, ["mapCol", "enemy", "player"]),
             scale(1.5),
             {
                 add() {
                 },
                 update() {
                     collideOnceWith(this, "player", (p) => {
-                        p.hurt(1);
+                        if (!player.isDashing) p.hurt(1);
                     })
 
                     viratAi(this, player, null, null)

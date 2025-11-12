@@ -37,10 +37,11 @@ player.onUpdate(() => {
 });
 
 player.onCollide("enemyBullet", () => {
-  if (!player.isDashing) { 
-    if (gameShake) shake(3);
-    player.hurt(1); 
-  }
+  if (!player.isDashing) player.hurt(1); 
+})
+
+player.on("hurt", () => {
+  if (gameShake) shake(3);
 })
 
 player.on("death", () => {
