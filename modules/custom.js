@@ -187,11 +187,8 @@ let p = {
             scale(),
             area(),
             anchor("center"),
-            {
-                onExitScreen() {
-                    destroy(this);
-                }
-            }   
+            opacity(),
+            offscreen({ destroy: true, distance: 400 }),
         ]
     },
     // sock bullet
@@ -320,7 +317,7 @@ let p = {
             sprite("virabirdBullet"),
             scale(4),
             ...p.bullet(),
-            projectile(600, 3, angle, false),
+            projectile(600, 3, angle, false, true),
             {
                 add() { this.angle = this.dir },
             } , 
@@ -469,12 +466,16 @@ function item(cd, mCd = []) {
     };
 }
 
-function lifespan(lifespan, s = false) {
+function lifespan(lSpan, s = false) {
     return {
         id: "lifespan",
         require: [],
 
-        lifespan: lifespan,
+        lifespan: lSpan,
+        sca: 1,
+        add() {
+            this.sca = this.scale?.x ?? 1;
+        },
         update() {
             if (this.lifespan === -1) return;
 
@@ -482,13 +483,17 @@ function lifespan(lifespan, s = false) {
 
             if (this.lifespan <= 0) destroy(this);
 
-            if (this.lifespan <= 0.1 && s) {
+            if (this.lifespan <= 0.1 && s === true) {
                 this.opacity = this.lifespan * 10;
-                this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
+                this.scale = vec2(
+                    this.sca + (0.5 - this.lifespan * 5 * this.sca),
+                    this.sca + (0.5 - this.lifespan * 5 * this.sca)
+                );
             }
         }
     }
 }
+
 
 function projectile(speed, lSpan, direction, col = false, sc = true) {
     return {
@@ -500,7 +505,7 @@ function projectile(speed, lSpan, direction, col = false, sc = true) {
         col: col,
         add() {
             if (lSpan) {
-                this.use(lifespan(lSpan))
+                this.use(lifespan(lSpan, true))
             }
             if (this.col) {
                 this.onCollide("mapCol", () => {
@@ -510,14 +515,6 @@ function projectile(speed, lSpan, direction, col = false, sc = true) {
         },
         update() {
             this.use(move(this.dir, this.speed));
-            this.lifespan -= dt();
-
-            if (this.lifespan <= 0) destroy(this);
-            
-            if (this.lifespan <= 0.1 && sc) {
-                this.opacity = this.lifespan * 10;
-                this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
-            }
         },
     }
 }
