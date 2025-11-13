@@ -42,6 +42,7 @@ player.onCollide("enemyBullet", () => {
 
 player.on("hurt", () => {
   if (gameShake) shake(3);
+  play("hurt");
 })
 
 player.on("death", () => {
@@ -99,7 +100,7 @@ menu.onUpdate(() => {
 bars.onUpdate(() => { bars.pos = getCamPos().sub(center()); });
 
 // Global updates
-onUpdate(() => {})
+onUpdate(() => { frameCounter++ })
 
 let mouseDown = false;
 onMousePress(() => {

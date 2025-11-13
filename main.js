@@ -33,7 +33,7 @@ import { createClient } from "./modules/imports/supabase.js";
 //-------------
 
 // cropbot version
-const VERSION = "nightly20251110";
+const VERSION = "nightly20251113";
 console.log("Cropbots version:", VERSION);
 
 //-------------
@@ -112,6 +112,12 @@ loadSprite("virabirdBullet", "assets/projectiles/virabirdBullet.png");
 loadSpriteAtlas("assets/tileset.png", "assets/tileset.json");
 loadSprite("chunk-24", "assets/chunk-24.png");
 loadSprite("loading", "assets/loading.png")
+
+//-------------
+// Sounds
+//-------------
+loadSound("grass", "assets/sounds/grass.wav");
+loadSound("hurt", "assets/sounds/hurt.wav");
 
 //-------------
 // Load all modules

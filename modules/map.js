@@ -207,8 +207,6 @@ function removeChunkColliders(cx, cy) {
 let lastVisibleChunks = { minChunkX: 0, maxChunkX: 0, minChunkY: 0, maxChunkY: 0 };
 
 function updateVisibleChunks(minTileX, maxTileX, minTileY, maxTileY) {
-  frameCounter++;
-
   if (frameCounter % 3 === 0) {
     const minChunkX = clamp(Math.floor(minTileX / CHUNK_TILES), 0, chunkCols - 1);
     const maxChunkX = clamp(Math.floor(maxTileX / CHUNK_TILES), 0, chunkCols - 1);
