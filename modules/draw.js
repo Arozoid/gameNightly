@@ -127,3 +127,7 @@ playerHealth.onDraw(() => {
       });
   }
 })
+
+onDraw(() => {
+    updateTrails();
+});

@@ -1,6 +1,50 @@
 //----------
 // handy dandy functions
 //----------
+// global trail list
+let trails = [];
+
+// createTrail(sprite, pos, scale, life, opacity, movement)
+function createTrail(sprite, pos, scale = 1, life = 0.1, opacity = 0.3, movement = vec2(0, 0)) {
+    trails.push({
+        sprite,
+        pos: pos.clone(),
+        scale,
+        life,
+        opacity,
+        timer: life,
+        movement,
+    });
+}
+
+// call this each frame
+function updateTrails() {
+    for (let i = trails.length - 1; i >= 0; i--) {
+        const t = trails[i];
+
+        // move it a bit
+        t.pos = t.pos.add(t.movement.scale(dt()));
+
+        // fade out
+        t.timer -= dt();
+        const alpha = Math.max(0, t.timer / t.life) * t.opacity;
+
+        // draw directly
+        drawSprite({
+            sprite: t.sprite,
+            pos: t.pos,
+            scale: t.scale,
+            opacity: alpha,
+            anchor: "center",
+        });
+
+        // remove if dead
+        if (t.timer <= 0) {
+            trails.splice(i, 1);
+        }
+    }
+}
+
 sMoveTowards = (a, b) => {};
 
 function mulVecBy(vec, x) {
@@ -347,16 +391,7 @@ let e = {
                         (Math.round(Math.random())) - (Math.round(Math.random())),
                         (Math.round(Math.random())) - (Math.round(Math.random())),
                     );
-                    add([
-                        pos(this.pos),
-                        anchor("center"),
-                        sprite(this.sprite),
-                        scale((this.scale) ? this.scale : 1),
-                        opacity(0.3),
-                        lifespan(0.2), // fades quickly
-                        area(),
-                        projectile(200, null, inputDir, false, false)
-                    ]);
+                    createTrail(this.sprite, this.pos, this.scale ?? 1, 0.3, 1, inputDir.scale(200));
                     gigaAi(this, player, [3, 2, 5], ["jamBullet", "fireWaveBullet", "gigagantrumSpawn"]);
                 }
             }
@@ -544,14 +579,7 @@ function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2, dCol = ["m
                 this.pos = this.pos.add(this.dashDir.scale(this.dashSpeed * dt()));
 
                 // create trail
-                add([
-                    pos(this.pos),
-                    anchor("center"),
-                    sprite(this.sprite),
-                    scale((this.scale) ? this.scale : 1),
-                    opacity(0.3),
-                    lifespan(0.1) // fades quickly
-                ]);
+                createTrail(this.sprite, this.pos, this.scale ?? 1, 0.2, 0.3);
 
                 if (this.dashDurRmn <= 0) {
                     this.isDashing = false;
