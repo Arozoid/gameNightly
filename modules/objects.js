@@ -25,27 +25,9 @@ setCamPos(player.pos);
 
 // those one guys (thatoneguy AND battle cats reference??)
 
-for (let i = 0; i < 5; i++) {
-  add([
-    ...e.virat(),
-    {
-      add() {
-        this.move(vec2((Math.random() * 2500), (Math.random() * 2500)))
-      },
-    },
-  ]);
-}
+summon(() => e.virat(), player.pos, 5);
 
-for (let i = 0; i < 3; i++) {
-  add([
-    ...e.virabird(),
-    {
-      add() {
-        this.move(vec2((Math.random() * 2500), (Math.random() * 2500)))
-      },
-    },
-  ]);
-}
+summon(() => e.virabird(), player.pos, 3);
 
 /*for (let i = 0; i < 2; i++) {
   add([

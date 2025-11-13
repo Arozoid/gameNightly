@@ -117,14 +117,8 @@ sixSeven.onUpdate(() => {
 
   if (sixSeven.six && sixSeven.seven) {
     player.pos = vec2(150, 150);
-    add([
-      ...e.gigagantrum(),
-      {
-        add() {
-          this.move(vec2((Math.random() * 3000), (Math.random() * 3000)))
-        },
-      },
-    ]);
+    summon(() => e.gigagantrum(), vec2(0, 1000));
+    summon(() => e.gigagantrum(), vec2(1000, 0));
     destroy(sixSeven);
   }
 })

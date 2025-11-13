@@ -106,6 +106,28 @@ function collideOnceWith(obj, targets, callback) {
     });
 }
 
+// repeat
+function repeat(fn, times) {
+    for (let i = 0; i < times; i++) {
+        fn(i);
+    }
+}
+
+// entity spawn
+function summon(_ = () => e.virabird(), _pos_ = player.pos, i = 1, extra = [""]) {
+    repeat(() => {
+        add([
+            ..._(),
+            {
+            add() {
+                this.pos = _pos_;
+            },
+            },
+            ...extra,
+        ]);
+    }, i)
+}
+
 //----------
 // custom types
 //----------
@@ -261,7 +283,7 @@ let p = {
         ]
     },
 
-    gigagantrumSpawn() {
+    gigagantrumSpawn(_pos) {
         return [
             "gigagantrumSpawn",
             sprite("virat"),
@@ -271,15 +293,8 @@ let p = {
                     this.hidden = true;
                 },
                 update() {
-                    add([
-                        pos(this.pos),
-                        ...e.virat(),
-                    ]);
-
-                    add([
-                        pos(this.pos),
-                        ...e.virabird(),
-                    ]);
+                    summon(() => e.virat(), this.pos);
+                    summon(() => e.virabird(), this.pos);
                     destroy(this);
                 }
             }
@@ -289,10 +304,10 @@ let p = {
 
 // entities
 let e = {
-    enemy(col = []) {
+    enemy(col = [], tag = true) {
         return [
-            "enemy",
-            pos(player.pos),
+            (tag) ? "enemy" : "",
+            pos(),
             area({ collisionIgnore: col }),
             rotate(),
             body({ drag: 0.5, maxSpeed: 200 }),
@@ -319,10 +334,11 @@ let e = {
     gigagantrum() {
         return [
             "gigagantrumEnemy",
+            "boss",
             sprite("gigagantrum"),
             scale(3),
             health(100),
-            ...e.enemy(["mapCol","enemy"]),
+            ...e.enemy(["mapCol","enemy"], false),
             item([3, 2, 5]),
             {
                 update() {
