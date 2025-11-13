@@ -29,6 +29,9 @@ function shootBullet(_, player, prCd, prType) {
 				_.cd[i] = prCd[i];
 				add([
 					pos(_.pos),
+					{
+						_pos: _.pos,
+					},
 					...p[prType[i]](angleBtwn(_.pos, player.pos)),
 				])
 			}
@@ -57,7 +60,7 @@ function rangerAi(_, player, prCd, prType) {
 
 // giga ai
 function gigaAi(_, player, prCd, prType) {
-    sMoveTowards(_, player, 50);
+    sMoveTowards(_, player, 100);
 	shootBullet(_, player, prCd, prType);
 }	
 
@@ -74,7 +77,7 @@ function viratAi(_, player, prCd, prType) {
 }
 
 function virabirdAi(_, player, prCd, prType) {
-	if (distance(_, player) <= 300) {
+	if (distance(_, player) <= 200) {
     	sMoveTowards(_, player, -1000);
   	} else if (distance(_, player) >= 300) {
     	sMoveTowards(_, player, 1500);

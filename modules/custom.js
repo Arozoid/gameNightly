@@ -260,6 +260,31 @@ let p = {
             } , 
         ]
     },
+
+    gigagantrumSpawn() {
+        return [
+            "gigagantrumSpawn",
+            sprite("virat"),
+            ...p.bullet(),
+            {
+                add() {
+                    this.hidden = true;
+                },
+                update() {
+                    add([
+                        pos(this.pos),
+                        ...e.virat(),
+                    ]);
+
+                    add([
+                        pos(this.pos),
+                        ...e.virabird(),
+                    ]);
+                    destroy(this);
+                }
+            }
+        ]
+    }
 };
 
 // entities
@@ -267,7 +292,6 @@ let e = {
     enemy(col = []) {
         return [
             "enemy",
-            scale(),
             pos(player.pos),
             area({ collisionIgnore: col }),
             rotate(),
@@ -281,6 +305,7 @@ let e = {
         return [
             "skullerEnemy",
             sprite("skuller"),
+            scale(),
             health(5),
             ...e.enemy(["mapCol"]),
             item(Math.random() * 2),
@@ -295,12 +320,28 @@ let e = {
         return [
             "gigagantrumEnemy",
             sprite("gigagantrum"),
-            health(30),
-            ...e.enemy(["mapCol"]),
-            item([3, 2]),
+            scale(3),
+            health(100),
+            ...e.enemy(["mapCol","enemy"]),
+            item([3, 2, 5]),
             {
                 update() {
-                    gigaAi(this, player, [3, 2], ["jamBullet", "fireWaveBullet"]);
+                    // create trail
+                    const inputDir = vec2(
+                        (Math.round(Math.random())) - (Math.round(Math.random())),
+                        (Math.round(Math.random())) - (Math.round(Math.random())),
+                    );
+                    add([
+                        pos(this.pos),
+                        anchor("center"),
+                        sprite(this.sprite),
+                        scale((this.scale) ? this.scale : 1),
+                        opacity(0.3),
+                        lifespan(0.2), // fades quickly
+                        area(),
+                        projectile(200, null, inputDir, false, false)
+                    ]);
+                    gigaAi(this, player, [3, 2, 5], ["jamBullet", "fireWaveBullet", "gigagantrumSpawn"]);
                 }
             }
         ];
@@ -312,7 +353,7 @@ let e = {
             health(5),
             ...e.enemy(["mapCol"]),
             item(Math.random() * 2),
-            dash(["mapCol"], 1200, Math.random() * 5, 2, 0.3, ["mapCol", "enemy", "player"]),
+            dash(["mapCol"], 1800, Math.random() * 5, 2, 0.2, ["mapCol", "enemy", "player"]),
             scale(1.5),
             {
                 add() {},
@@ -398,16 +439,18 @@ function lifespan(lifespan, s = false) {
     }
 }
 
-function projectile(speed, lifespan, direction, col) {
+function projectile(speed, lSpan, direction, col = false, sc = true) {
     return {
         id: "projectile",
         require: [ "area", "scale" ],
 
-        lifespan: lifespan,
         speed: speed,
         dir: direction,
         col: col,
         add() {
+            if (lSpan) {
+                this.use(lifespan(lSpan))
+            }
             if (this.col) {
                 this.onCollide("mapCol", () => {
                     this.lifespan = 0.1;
@@ -420,7 +463,7 @@ function projectile(speed, lifespan, direction, col) {
 
             if (this.lifespan <= 0) destroy(this);
             
-            if (this.lifespan <= 0.1) {
+            if (this.lifespan <= 0.1 && sc) {
                 this.opacity = this.lifespan * 10;
                 this.scale = vec2(1 + (0.5 - this.lifespan * 5), 1 + (0.5 - this.lifespan * 5));
             }

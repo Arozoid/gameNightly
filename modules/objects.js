@@ -2,7 +2,7 @@
 // Objects & UI
 //-------------
 // the chosen bean. (alan becker reference??)
-pHp = 40;
+pHp = 20;
 
 const player = add([
   "player",
@@ -24,6 +24,7 @@ const player = add([
 setCamPos(player.pos);
 
 // those one guys (thatoneguy AND battle cats reference??)
+
 for (let i = 0; i < 5; i++) {
   add([
     ...e.virat(),
@@ -142,3 +143,11 @@ const bars = add([
   scale(1),
   pos(getCamPos().sub(center())),
 ])
+
+// don't ask
+const sixSeven = add([
+  {
+    six: false,
+    seven: false,
+  }
+]);

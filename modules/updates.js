@@ -109,3 +109,22 @@ onMousePress(() => {
 onMouseRelease(() => {
   mouseDown = false;
 })
+
+// don't ask
+sixSeven.onUpdate(() => {
+  if (isKeyDown("6")) sixSeven.six = true;
+  if (isKeyDown("7")) sixSeven.seven = true;
+
+  if (sixSeven.six && sixSeven.seven) {
+    player.pos = vec2(150, 150);
+    add([
+      ...e.gigagantrum(),
+      {
+        add() {
+          this.move(vec2((Math.random() * 3000), (Math.random() * 3000)))
+        },
+      },
+    ]);
+    destroy(sixSeven);
+  }
+})
