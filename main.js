@@ -100,6 +100,9 @@ loadSprite("heart-empty-o", "assets/ui/heart-empty.png");
 
 loadSprite("player01", "assets/objects/player01.png");
 loadSprite("player02", "assets/objects/player02.png");
+loadSprite("player03", "assets/objects/player03.png");
+loadSprite("player04", "assets/objects/player04.png");
+loadSprite("player08", "assets/objects/player08.png");
 loadSprite("virat", "assets/objects/virat.png");
 
 loadSpriteAtlas("assets/tileset.png", "assets/tileset.json");

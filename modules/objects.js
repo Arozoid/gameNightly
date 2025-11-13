@@ -6,7 +6,7 @@ pHp = 20;
 
 const player = add([
   "player",
-  sprite("player02"),
+  sprite("player04"),
   pos(vec2(mapPixelWidth / 2, mapPixelHeight / 2)),
   color(),
   rotate(0),
@@ -16,8 +16,9 @@ const player = add([
   body(),
   anchor("center"),
   health(pHp),
-  dash(true, 1200, 0, 1, 0.2),
+  dash(true, 1200, 0, 1, 0.2, []),
   lifespan(-1, true),
+  //scale(1),
 ]);
 
 setCamPos(player.pos);

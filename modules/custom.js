@@ -450,7 +450,7 @@ function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2, dCol = ["m
                     pos(this.pos),
                     anchor("center"),
                     sprite(this.sprite),
-                    scale(this.scale),
+                    scale((this.scale) ? this.scale : 1),
                     opacity(0.3),
                     lifespan(0.1) // fades quickly
                 ]);
