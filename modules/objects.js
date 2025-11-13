@@ -2,7 +2,7 @@
 // Objects & UI
 //-------------
 // the chosen bean. (alan becker reference??)
-pHp = 20;
+pHp = 40;
 
 const player = add([
   "player",
@@ -18,7 +18,7 @@ const player = add([
   health(pHp),
   dash(true, 1200, 0, 1, 0.2, []),
   lifespan(-1, true),
-  //scale(1),
+  scale(1),
 ]);
 
 setCamPos(player.pos);
@@ -27,6 +27,17 @@ setCamPos(player.pos);
 for (let i = 0; i < 5; i++) {
   add([
     ...e.virat(),
+    {
+      add() {
+        this.move(vec2((Math.random() * 2500), (Math.random() * 2500)))
+      },
+    },
+  ]);
+}
+
+for (let i = 0; i < 3; i++) {
+  add([
+    ...e.virabird(),
     {
       add() {
         this.move(vec2((Math.random() * 2500), (Math.random() * 2500)))

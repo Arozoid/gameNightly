@@ -63,7 +63,28 @@ function gigaAi(_, player, prCd, prType) {
 
 // virat ai
 function viratAi(_, player, prCd, prType) {
+	if (distance(_, player) <= 200) {
+    	sMoveTowards(_, player, -400);
+  	} else if (distance(_, player) >= 205) {
+    	sMoveTowards(_, player, 200);
+  	}
 	sMoveTowards(_, player, 200);
 	const inputDir = radBtwn(_.pos, player.pos);
+    _.dash(inputDir.x, inputDir.y);
+}
+
+function virabirdAi(_, player, prCd, prType) {
+	if (distance(_, player) <= 300) {
+    	sMoveTowards(_, player, -1000);
+  	} else if (distance(_, player) >= 300) {
+    	sMoveTowards(_, player, 1500);
+  	}
+
+  	shootBullet(_, player, prCd, prType);
+
+	const inputDir = vec2(
+        (Math.round(Math.random())) - (Math.round(Math.random())),
+        (Math.round(Math.random())) - (Math.round(Math.random())),
+    );
     _.dash(inputDir.x, inputDir.y);
 }

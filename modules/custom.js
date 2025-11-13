@@ -246,6 +246,20 @@ let p = {
             },
         ];
     },
+
+    virabirdBullet(angle) {
+        return [
+            "virabirdBullet",
+            "enemyBullet",
+            sprite("virabirdBullet"),
+            scale(4),
+            ...p.bullet(),
+            projectile(600, 3, angle, false),
+            {
+                add() { this.angle = this.dir },
+            } , 
+        ]
+    },
 };
 
 // entities
@@ -301,14 +315,39 @@ let e = {
             dash(["mapCol"], 1200, Math.random() * 5, 2, 0.3, ["mapCol", "enemy", "player"]),
             scale(1.5),
             {
-                add() {
-                },
+                add() {},
+
                 update() {
                     collideOnceWith(this, "player", (p) => {
-                        if (!player.isDashing) p.hurt(1);
+                        if (!p.isDashing) p.hurt(1);
                     })
 
-                    viratAi(this, player, null, null)
+                    viratAi(this, player, null, null);
+                }
+            }
+        ]
+    },
+    virabird() {
+        return [
+            "virabirdEnemy",
+            sprite("virabird"),
+            health(2),
+            ...e.enemy(["mapCol","enemy","player"]),
+            item(Math.random() * 2),
+            dash(["mapCol","enemy","player"], 750, 0, 1, 0.9, ["mapCol", "enemy", "player"]),
+            scale(1),
+            {
+                add() {
+
+                },
+                update() {
+                    /*
+                    collideOnceWith(this, "player", (p) => {
+                        if (!p.isDashing) this.hurt(1);
+                    })
+                    */
+
+                    virabirdAi(this, player, 1, "virabirdBullet");
                 }
             }
         ]
