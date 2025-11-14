@@ -37,7 +37,7 @@ player.onUpdate(() => {
         player.vel = vec2(0,0);
     }
 
-    setCamPos(getCamPos().lerp(player.pos, 0.12));
+    setCamPos(getCamPos().lerp(player.pos.sub(player.width / 2, player.height / 2), 0.12));
 
     const cam = getCamPos();
     setCamPos(vec2(
@@ -62,7 +62,7 @@ player.on("death", () => {
 
 // sword updates (coolness)
 heldItem.onUpdate(() => {
-  heldItem.pos = player.pos.add(radBtwn(player.pos, cursor.pos).scale(40));
+  heldItem.pos = player.pos.add(vec2(50 - (player.width * 2.5), player.height / -2)).add(radBtwn(player.pos, cursor.pos).scale(40));
   heldItem.angle = angleBtwn(player.pos, cursor.pos);
 
   if (mouseDown && heldItem.cd <= 0) {

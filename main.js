@@ -119,6 +119,8 @@ loadSprite("loading", "assets/loading.png")
 loadSound("grass", "assets/sounds/grass.wav");
 loadSound("hurt", "assets/sounds/hurt.wav");
 loadSound("hit", "assets/sounds/hit.wav");
+loadSound("pickup", "assets/sounds/coinpickup.wav");
+loadSound("select", "assets/sounds/select.wav");
 
 //-------------
 // Load all modules

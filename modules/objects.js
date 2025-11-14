@@ -2,21 +2,22 @@
 // Objects & UI
 //-------------
 // the chosen bean. (alan becker reference??)
-pHp = 20;
+pHp = 30;
 
 const player = add([
   "player",
-  sprite("player04"),
+  sprite("player08"),
   pos(vec2(mapPixelWidth / 2, mapPixelHeight / 2)),
   color(),
   rotate(0),
   area({
     shape: new Rect(vec2(0), 20, 20),
+    collisionIgnore: [],
   }),
   body(),
-  anchor("center"),
+  anchor("botright"),
   health(pHp, pHp),
-  dash(true, 1200, 0, 1, 0.2, []),
+  dash(true, 1200, 0, 1, 0.2, ["mapCol", "enemy", "player"]),
   lifespan(-1, true),
   scale(1),
 ]);
@@ -25,7 +26,7 @@ setCamPos(player.pos);
 
 // those one guys (thatoneguy AND battle cats reference??)
 
-summon(() => e.virat(), player.pos, 5);
+summon(() => e.virat(), player.pos, 0);
 
 summon(() => e.virabird(), player.pos, 3);
 
@@ -43,7 +44,7 @@ summon(() => e.virabird(), player.pos, 3);
 // the chosen bean's blade. (alan becker reference??)
 const heldItem = add([
   sprite("sok"),
-  pos(player.pos.add(vec2(50,0))),
+  pos(player.pos.add(vec2(50 - (player.width / 2),player.height / -2))),
   color(),
   rotate(0),
   area(),

@@ -5,7 +5,7 @@
 let trails = [];
 
 // createTrail(sprite, pos, scale, life, opacity, movement)
-function createTrail(sprite, pos, scale = 1, life = 0.1, opacity = 0.3, movement = vec2(0, 0)) {
+function createTrail(sprite, pos, scale = 1, life = 0.1, opacity = 0.3, movement = vec2(0, 0), anchor = "center") {
     trails.push({
         sprite,
         pos: pos.clone(),
@@ -14,6 +14,7 @@ function createTrail(sprite, pos, scale = 1, life = 0.1, opacity = 0.3, movement
         opacity,
         timer: life,
         movement,
+        anchor,
     });
 }
 
@@ -35,7 +36,7 @@ function updateTrails() {
             pos: t.pos,
             scale: t.scale,
             opacity: alpha,
-            anchor: "center",
+            anchor: t.anchor,
         });
 
         // remove if dead
@@ -399,7 +400,7 @@ let e = {
             "boss",
             sprite("gigagantrum"),
             scale(3),
-            health(100, 100),
+            health(50, 50),
             ...e.enemy(["mapCol","enemy"], false),
             item([3, 2, 5]),
             {
@@ -612,7 +613,7 @@ function dash(col = true, dSpd = 1200, dCd = 0, dMCd = 1, dDur = 0.2, dCol = ["m
                 this.pos = this.pos.add(this.dashDir.scale(this.dashSpeed * dt()));
 
                 // create trail
-                createTrail(this.sprite, this.pos, this.scale ?? 1, 0.2, 0.3);
+                createTrail(this.sprite, this.pos, this.scale ?? 1, 0.2, 0.3, vec2(0,0), this.anchor);
 
                 if (this.dashDurRmn <= 0) {
                     this.isDashing = false;
