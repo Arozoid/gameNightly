@@ -52,7 +52,7 @@ player.onCollide("enemyBullet", () => {
 
 player.on("hurt", () => {
   if (gameShake) shake(3);
-  play("hurt", { volume: 4 });
+  play("hurt", { volume: 3 });
 })
 
 player.on("death", () => {

@@ -2,7 +2,7 @@
 // Objects & UI
 //-------------
 // the chosen bean. (alan becker reference??)
-pHp = 500;
+pHp = 30;
 
 const player = add([
   "player",
