@@ -2,7 +2,7 @@
 // Objects & UI
 //-------------
 // the chosen bean. (alan becker reference??)
-pHp = 30;
+pHp = 500;
 
 const player = add([
   "player",
@@ -21,14 +21,14 @@ const player = add([
   lifespan(-1, true),
   scale(1),
 ]);
-
+ 
 setCamPos(player.pos);
 
 // those one guys (thatoneguy AND battle cats reference??)
 
-summon(() => e.virat(), player.pos, 0);
+summon(() => e.virat(), player.pos, 2);
 
-summon(() => e.virabird(), player.pos, 3);
+summon(() => e.virabird(), player.pos, 1);
 
 /*for (let i = 0; i < 2; i++) {
   add([
