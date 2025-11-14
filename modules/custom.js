@@ -367,12 +367,12 @@ let e = {
             {
                 add() {
                     this.on("hurt", () => {
-                        play("enemyHurt", { volume: 0.25 });
+                        play("hurt2", { volume: 0.25 });
                         play("hurt", { volume: 0.25 });
                     });
                     
                     this.onDestroy(() => {
-                        play("enemyHurt", { volume: 1.75 });
+                        play("hurt2", { volume: 1.75 });
                         play("hurt", { volume: 1.75 });
                     });
                 }
