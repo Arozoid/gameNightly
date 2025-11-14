@@ -3,10 +3,20 @@
 //-------------
 
 player.onUpdate(() => {
+    const xKeyInputs = 
+        ((isKeyDown("d") || isKeyDown("right")) ? 1 : 0) - 
+        ((isKeyDown("a") || isKeyDown("left")) ? 1 : 0);
+    
+    const yKeyInputs =
+        ((isKeyDown("s") || isKeyDown("down")) ? 1 : 0) -
+        ((isKeyDown("w") || isKeyDown("up")) ? 1 : 0);
+      
     const inputDir = vec2(
-        (isKeyDown("d") ? 1 : 0) - (isKeyDown("a") ? 1 : 0),
-        (isKeyDown("s") ? 1 : 0) - (isKeyDown("w") ? 1 : 0)
+        xKeyInputs,
+        yKeyInputs,
     );
+    
+    if ((xKeyInputs || yKeyInputs) && frameCounter % 10 == 0) play("grass", { volume: 0.5 });
 
     // dash
     if (isKeyDown("space")) {
@@ -42,7 +52,7 @@ player.onCollide("enemyBullet", () => {
 
 player.on("hurt", () => {
   if (gameShake) shake(3);
-  play("hurt");
+  play("hurt", { volume: 4 });
 })
 
 player.on("death", () => {

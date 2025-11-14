@@ -88,17 +88,21 @@ function drawBar(_ = {
         outline: 7.5,
         bgColor: rgb(22, 22, 22),
         fgColor: rgb(244, 244, 255),
-        pct: 0,
+        pct: 1,
+        anchor: "topleft",
+        scale: 1,
     }) {
 
-    const w = _.width;
-    const h = _.height;
-    const x = _.x;
-    const y = _.y;
-    const o = _.outline;
-    const c = _.bgColor;
-    const fC = _.fgColor;
-    const pct = _.pct;
+    const w = _.width ?? 100;
+    const h = _.height ?? 20;
+    const x = _.x ?? center().x - _.w;
+    const y = _.y ?? height() - 50;
+    const o = _.outline ?? 7.5;
+    const c = _.bgColor ?? rgb(22, 22 ,22);
+    const fC = _.fgColor ?? rgb(244, 244, 255);
+    const pct = _.pct ?? "1";
+    const anch = _.anchor ?? "topleft";
+    const sca = _.scale ?? 1;
 
     // background
     drawRect({
@@ -106,14 +110,18 @@ function drawBar(_ = {
       width: w,
       height: h,
       color: c,
+      anchor: anch,
+      scale: sca,
     });
 
     // fill
     drawRect({
-      pos: vec2(x + o/2, y + o/2),
+      pos: vec2(x + (o/2 * sca), y + (o/2 * sca)),
       width: (w - o) * pct,
       height: (h - o),
       color: fC,
+      anchor: anch,
+      scale: sca,
     });
 }
 
@@ -355,6 +363,19 @@ let e = {
             anchor('center'),
             enemy(),
             lifespan(-1, true),
+            {
+                add() {
+                    this.on("hurt", () => {
+                        play("hit", { volume: 0.25 });
+                        play("hurt", { volume: 0.25 });
+                    });
+                    
+                    this.onDestroy(() => {
+                        play("hit", { volume: 1.75 });
+                        play("hurt", { volume: 1.75 });
+                    });
+                }
+            },
         ];
     },
     skuller() {
@@ -362,7 +383,7 @@ let e = {
             "skullerEnemy",
             sprite("skuller"),
             scale(),
-            health(5),
+            health(5, 5),
             ...e.enemy(["mapCol"]),
             item(Math.random() * 2),
             {
@@ -378,7 +399,7 @@ let e = {
             "boss",
             sprite("gigagantrum"),
             scale(3),
-            health(100),
+            health(100, 100),
             ...e.enemy(["mapCol","enemy"], false),
             item([3, 2, 5]),
             {
@@ -398,7 +419,7 @@ let e = {
         return [
             "viratEnemy",
             sprite("virat"),
-            health(5),
+            health(5, 5),
             ...e.enemy(["mapCol"]),
             item(Math.random() * 2),
             dash(["mapCol"], 1800, Math.random() * 5, 2, 0.2, ["mapCol", "enemy", "player"]),
@@ -420,7 +441,7 @@ let e = {
         return [
             "virabirdEnemy",
             sprite("virabird"),
-            health(2),
+            health(2, 2),
             ...e.enemy(["mapCol","enemy","player"]),
             item(Math.random() * 2),
             dash(["mapCol","enemy","player"], 750, 0, 1, 0.9, ["mapCol", "enemy", "player"]),
@@ -522,7 +543,7 @@ function projectile(speed, lSpan, direction, col = false, sc = true) {
 function enemy() {
     return {
         id: "enemy",
-        require: [ "health", "lifespan" ],
+        require: [ "health", "lifespan", "scale" ],
         
         xVel: 0,
         yVel: 0,
@@ -538,6 +559,21 @@ function enemy() {
         },
         update() {
             
+        },
+        draw() {
+          if (this.maxHP() > this.hp())
+          drawBar({
+              width: 40,
+              height: 9,
+              x: (this.scale?.x < 1.5) ? -20 * (1.5 / this.scale?.x) : -20,
+              y: 0 - (this.height / 2) - 20,
+              outline: 4,
+              bgColor: rgb(22, 22, 22),
+              fgColor: rgb(255, 115, 81),
+              pct: (this.hp() / this.maxHP()),
+              anchor: "topleft",
+              scale: (this.scale?.x < 1.5) ? (1.5 / this.scale?.x) : 1,
+          });
         },
     }
 }

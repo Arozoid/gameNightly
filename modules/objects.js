@@ -15,7 +15,7 @@ const player = add([
   }),
   body(),
   anchor("center"),
-  health(pHp),
+  health(pHp, pHp),
   dash(true, 1200, 0, 1, 0.2, []),
   lifespan(-1, true),
   scale(1),
