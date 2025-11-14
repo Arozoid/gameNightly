@@ -1,7 +1,7 @@
 const mapPixelWidth = 512 * 64;   // map width in pixels
 const mapPixelHeight = 512 * 64;  // map height in pixels
 const tileSize = 64;
-const thickness = Math.max(tileSize, 16);
+const thickness = Math.max(tileSize, 128);
 
 // number of cols/rows (tiles)
 const cols = Math.ceil(mapPixelWidth / tileSize);
@@ -133,10 +133,10 @@ function createTiles() {
 
   // map boundaries - keep permanent bodies for world edges
   const boundaries = [
-    { _pos: [0, -thickness], size: [mapPixelWidth, thickness] },
-    { _pos: [0, mapPixelHeight], size: [mapPixelWidth, thickness] },
-    { _pos: [-thickness, 0], size: [thickness, mapPixelHeight] },
-    { _pos: [mapPixelWidth, 0], size: [thickness, mapPixelHeight] },
+    { _pos: [-thickness, -thickness], size: [mapPixelWidth + thickness, thickness] },
+    { _pos: [-thickness, mapPixelHeight], size: [mapPixelWidth + thickness, thickness] },
+    { _pos: [-thickness, -thickness], size: [thickness, mapPixelHeight + thickness] },
+    { _pos: [mapPixelWidth, -thickness], size: [thickness, mapPixelHeight + thickness] },
   ];
 
   boundaries.forEach(({ _pos, size }) => {

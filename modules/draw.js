@@ -108,7 +108,7 @@ const totalRows = Math.ceil(pHp / heartsPerRow);
 
 playerHealth.onDraw(() => {
   for (let i = player.maxHP() - 1; i >= 0; i--) {
-      const flippedIndex = pHp - 1 - i;
+      const flippedIndex = player.maxHP() - 1 - i;
       let s = vec2(1, 1);
       let c = 'heart-o';
       if (flippedIndex >= player.hp()) {

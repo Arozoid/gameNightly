@@ -2,7 +2,8 @@
 // Objects & UI
 //-------------
 // the chosen bean. (alan becker reference??)
-pHp = 30;
+let pHp = 30;
+let difficulty = 1;
 
 const player = add([
   "player",

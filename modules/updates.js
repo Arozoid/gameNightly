@@ -16,7 +16,7 @@ player.onUpdate(() => {
         yKeyInputs,
     );
     
-    if ((xKeyInputs || yKeyInputs) && frameCounter % 10 == 0) play("grass", { volume: 0.5 });
+    if ((xKeyInputs || yKeyInputs) && frameCounter % 10 == 0) play("grass", { volume: 0.4 });
 
     // dash
     if (isKeyDown("space")) {
@@ -50,9 +50,10 @@ player.onCollide("enemyBullet", () => {
   if (!player.isDashing) player.hurt(1); 
 })
 
-player.on("hurt", () => {
+player.on("hurt", (num) => {
   if (gameShake) shake(3);
-  play("hurt", { volume: 3 });
+  player.setHP(player.hp() + num * (1 - difficulty));
+  play("hurt", { volume: 1.5 });
 })
 
 player.on("death", () => {
@@ -132,4 +133,8 @@ sixSeven.onUpdate(() => {
     summon(() => e.gigagantrum(), vec2(1000, 0));
     destroy(sixSeven);
   }
+})
+
+scene("expedition", () => {
+
 })
